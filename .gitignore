@@ -1,64 +1,48 @@
-# Python bytecode and caches
-__pycache__/
-*.py[cod]
-*$py.class
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
-
-# Virtual environments
+# Python
 .venv/
-venv/
-env/
+__pycache__/
+*.pyc
+.pytest_cache/
 
-# Packaging and coverage output
-build/
-dist/
-*.egg-info/
-.coverage
-htmlcov/
-
-# Environment and editor files
+# Environment and secrets
 .env
 .env.*
 !.env.example
-.idea/
-.vscode/
+*.pem
+*.key
 
-# Generated and uploaded audio/MIDI files
+# Frontend
+node_modules/
+dist/
+
+# Neural model weights and downloads
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.whl
+
+# Audio files
 *.wav
 *.mp3
 *.flac
-*.ogg
-*.m4a
-*.aac
-*.mid
-*.midi
 
-# Local uploads, separated stems, and downloaded model weights
-backend/data/
-*.pth
-*.th
+# Experiment output
+experiments/**/runs/
+experiments/**/cache/
+experiments/**/assets/
 
-# User-provided SoundFonts
-*.sf2
-*.sf3
+# Generated audio data
+/backend/data/
 
-# Frontend dependencies and test artifacts
-node_modules/
-coverage/
-playwright-report/
-test-results/
-*.tsbuildinfo
+# Soundfonts
+/assets/soundfonts/
 
-# Optional local GPL DSP utility (retain upstream licence files locally)
-tools/rubberband-4.0.0/
-tools/rubberband-4.0.0-windows.zip
+# Downloaded third-party libraries
+/experiments/neural_vocals/vendor/
+/tools/rubberband-4.0.0/
+/tools/rubberband-4.0.0-windows.zip
 
-# Isolated neural feasibility downloads/environments; no model weights in git
-experiments/neural_vocals/.venv/
-experiments/neural_vocals/assets/
-experiments/neural_vocals/vendor/
-experiments/neural_vocals/runs/
-experiments/neural_vocals/cache/
-
+# Frontend test results
+/frontend/test-results/
