@@ -1,0 +1,298 @@
+{
+  "threshold": "labelled chord with heuristic confidence < 0.5 is low_confidence",
+  "status_seconds": {
+    "chord": 5.539999999999999,
+    "low_confidence": 5.0,
+    "ambiguous": 7.5,
+    "no_chord": 2.0
+  },
+  "frames": [
+    {
+      "start": 0.0,
+      "end": 0.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "status": "no_chord"
+    },
+    {
+      "start": 0.5,
+      "end": 1.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "status": "no_chord"
+    },
+    {
+      "start": 1.0,
+      "end": 1.5,
+      "label": "ambiguous",
+      "confidence": 0.01166866000079535,
+      "status": "ambiguous"
+    },
+    {
+      "start": 1.5,
+      "end": 2.0,
+      "label": "ambiguous",
+      "confidence": 0.01918878395630709,
+      "status": "ambiguous"
+    },
+    {
+      "start": 2.0,
+      "end": 2.5,
+      "label": "B:minor",
+      "confidence": 0.4117308682438419,
+      "status": "low_confidence"
+    },
+    {
+      "start": 2.5,
+      "end": 3.0,
+      "label": "B:minor",
+      "confidence": 0.5443014185799027,
+      "status": "chord"
+    },
+    {
+      "start": 3.0,
+      "end": 3.5,
+      "label": "G:major",
+      "confidence": 0.6565372716973908,
+      "status": "chord"
+    },
+    {
+      "start": 3.5,
+      "end": 4.0,
+      "label": "G:major",
+      "confidence": 0.7985694213872215,
+      "status": "chord"
+    },
+    {
+      "start": 4.0,
+      "end": 4.5,
+      "label": "G:major",
+      "confidence": 0.6376099196199253,
+      "status": "chord"
+    },
+    {
+      "start": 4.5,
+      "end": 5.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "status": "no_chord"
+    },
+    {
+      "start": 5.0,
+      "end": 5.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "status": "no_chord"
+    },
+    {
+      "start": 5.5,
+      "end": 6.0,
+      "label": "ambiguous",
+      "confidence": 0.006395462563907755,
+      "status": "ambiguous"
+    },
+    {
+      "start": 6.0,
+      "end": 6.5,
+      "label": "ambiguous",
+      "confidence": 0.07463888003632335,
+      "status": "ambiguous"
+    },
+    {
+      "start": 6.5,
+      "end": 7.0,
+      "label": "D:major",
+      "confidence": 0.3158097229539736,
+      "status": "low_confidence"
+    },
+    {
+      "start": 7.0,
+      "end": 7.5,
+      "label": "ambiguous",
+      "confidence": 0.022638044241309517,
+      "status": "ambiguous"
+    },
+    {
+      "start": 7.5,
+      "end": 8.0,
+      "label": "G:major",
+      "confidence": 0.2095914777797841,
+      "status": "low_confidence"
+    },
+    {
+      "start": 8.0,
+      "end": 8.5,
+      "label": "ambiguous",
+      "confidence": 0.05527976604093782,
+      "status": "ambiguous"
+    },
+    {
+      "start": 8.5,
+      "end": 9.0,
+      "label": "A:major",
+      "confidence": 0.7012714330544594,
+      "status": "chord"
+    },
+    {
+      "start": 9.0,
+      "end": 9.5,
+      "label": "A:major",
+      "confidence": 0.4503787881725809,
+      "status": "low_confidence"
+    },
+    {
+      "start": 9.5,
+      "end": 10.0,
+      "label": "A:major",
+      "confidence": 0.4172650483740749,
+      "status": "low_confidence"
+    },
+    {
+      "start": 10.0,
+      "end": 10.5,
+      "label": "A:major",
+      "confidence": 0.20510959650520305,
+      "status": "low_confidence"
+    },
+    {
+      "start": 10.5,
+      "end": 11.0,
+      "label": "ambiguous",
+      "confidence": 0.012802011027686213,
+      "status": "ambiguous"
+    },
+    {
+      "start": 11.0,
+      "end": 11.5,
+      "label": "D:major",
+      "confidence": 0.41108534376139844,
+      "status": "low_confidence"
+    },
+    {
+      "start": 11.5,
+      "end": 12.0,
+      "label": "D:major",
+      "confidence": 0.704473043895887,
+      "status": "chord"
+    },
+    {
+      "start": 12.0,
+      "end": 12.5,
+      "label": "D:major",
+      "confidence": 0.2386912793912882,
+      "status": "low_confidence"
+    },
+    {
+      "start": 12.5,
+      "end": 13.0,
+      "label": "D:major",
+      "confidence": 0.6920471106868566,
+      "status": "chord"
+    },
+    {
+      "start": 13.0,
+      "end": 13.5,
+      "label": "D:major",
+      "confidence": 0.6544344101654298,
+      "status": "chord"
+    },
+    {
+      "start": 13.5,
+      "end": 14.0,
+      "label": "D:major",
+      "confidence": 0.587181842253457,
+      "status": "chord"
+    },
+    {
+      "start": 14.0,
+      "end": 14.5,
+      "label": "ambiguous",
+      "confidence": 0.06943223172506657,
+      "status": "ambiguous"
+    },
+    {
+      "start": 14.5,
+      "end": 15.0,
+      "label": "ambiguous",
+      "confidence": 0.057120827344453666,
+      "status": "ambiguous"
+    },
+    {
+      "start": 15.0,
+      "end": 15.5,
+      "label": "G:major",
+      "confidence": 0.2073899843079689,
+      "status": "low_confidence"
+    },
+    {
+      "start": 15.5,
+      "end": 16.0,
+      "label": "ambiguous",
+      "confidence": 0.0077382059492939305,
+      "status": "ambiguous"
+    },
+    {
+      "start": 16.0,
+      "end": 16.5,
+      "label": "ambiguous",
+      "confidence": 0.05282157910777664,
+      "status": "ambiguous"
+    },
+    {
+      "start": 16.5,
+      "end": 17.0,
+      "label": "ambiguous",
+      "confidence": 0.07540696601353931,
+      "status": "ambiguous"
+    },
+    {
+      "start": 17.0,
+      "end": 17.5,
+      "label": "ambiguous",
+      "confidence": 0.035188435531251575,
+      "status": "ambiguous"
+    },
+    {
+      "start": 17.5,
+      "end": 18.0,
+      "label": "A:major",
+      "confidence": 0.17964713411167524,
+      "status": "low_confidence"
+    },
+    {
+      "start": 18.0,
+      "end": 18.5,
+      "label": "ambiguous",
+      "confidence": 0.01023079427404481,
+      "status": "ambiguous"
+    },
+    {
+      "start": 18.5,
+      "end": 19.0,
+      "label": "ambiguous",
+      "confidence": 0.1301008950576975,
+      "status": "ambiguous"
+    },
+    {
+      "start": 19.0,
+      "end": 19.5,
+      "label": "D:major",
+      "confidence": 0.9136593974867708,
+      "status": "chord"
+    },
+    {
+      "start": 19.5,
+      "end": 20.0,
+      "label": "D:major",
+      "confidence": 0.5973268235394651,
+      "status": "chord"
+    },
+    {
+      "start": 20.0,
+      "end": 20.04,
+      "label": "D:major",
+      "confidence": 0.7759532559425372,
+      "status": "chord"
+    }
+  ]
+}

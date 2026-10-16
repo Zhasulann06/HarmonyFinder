@@ -1,0 +1,15 @@
+{
+  "verified": [
+    {
+      "path": "assets\\wheels\\torchaudio-2.4.0+cu121-cp311-cp311-win_amd64.whl",
+      "bytes": 4115561,
+      "sha256": "1e399d274eefd35d77224c2c308bdbfcd7300cfa2c080e098aa8f215d7aba482"
+    },
+    {
+      "path": "assets\\wheels\\torch-2.4.0+cu121-cp311-cp311-win_amd64.whl",
+      "bytes": 2441950418,
+      "sha256": "bada31485e04282b9f099da39b774484d3e4c431b7ea0df3663817295ae764e4"
+    }
+  ],
+  "failures": []
+}

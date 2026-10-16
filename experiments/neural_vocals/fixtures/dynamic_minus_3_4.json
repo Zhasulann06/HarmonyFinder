@@ -1,0 +1,9 @@
+{
+  "label": "dynamic_minus_3_4",
+  "source_note_onsets_seconds": [1.35, 2.65, 4.49],
+  "transition_seconds": 0.08,
+  "times": [0.0, 1.31, 1.39, 2.61, 2.69, 4.45, 4.53, 6.0],
+  "shifts": [-3.0, -3.0, -4.0, -4.0, -3.0, -3.0, -4.0, -4.0],
+  "interpolation": "cubic smoothstep between adjacent map points",
+  "source": "pYIN note starts from the six-second separated vocal; fixed technical probe, not harmony planning"
+}

@@ -1,0 +1,442 @@
+{
+  "source": "C:\\Users\\user\\Desktop\\MyProjects\\HarmonyFinder\\backend\\data\\audio\\216a0de5-3e80-4a7a-8d72-ecfd510e762c\\instrumental.wav",
+  "source_sha256": "5d26c2f475a6adba86c8805c2b7d31e1bd2e3443fb7fa3d37bcdcdbdc568fede",
+  "source_audio": {
+    "samplerate": 44100,
+    "channels": 2,
+    "duration_seconds": 20.04,
+    "subtype": "FLOAT"
+  },
+  "analysis_rate": 11025,
+  "processing_seconds": 2.438906399998814,
+  "method": "11.025-kHz mono; 4096-point STFT; HPSS harmonic component; chroma_stft; 0.5-s median; inversion-independent major/minor triad cosine templates; isolated weak-blip smoothing",
+  "frames": [
+    {
+      "start": 0.0,
+      "end": 0.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 0.5,
+      "end": 1.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 1.0,
+      "end": 1.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 1.5,
+      "end": 2.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 2.0,
+      "end": 2.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 2.5,
+      "end": 3.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 3.0,
+      "end": 3.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 3.5,
+      "end": 4.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 4.0,
+      "end": 4.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 4.5,
+      "end": 5.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 5.0,
+      "end": 5.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 5.5,
+      "end": 6.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 6.0,
+      "end": 6.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 6.5,
+      "end": 7.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 7.0,
+      "end": 7.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 7.5,
+      "end": 8.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 8.0,
+      "end": 8.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 8.5,
+      "end": 9.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 9.0,
+      "end": 9.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 9.5,
+      "end": 10.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 10.0,
+      "end": 10.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 10.5,
+      "end": 11.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 11.0,
+      "end": 11.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 11.5,
+      "end": 12.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 12.0,
+      "end": 12.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 12.5,
+      "end": 13.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 13.0,
+      "end": 13.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 13.5,
+      "end": 14.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 14.0,
+      "end": 14.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 14.5,
+      "end": 15.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 15.0,
+      "end": 15.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 15.5,
+      "end": 16.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 16.0,
+      "end": 16.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 16.5,
+      "end": 17.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 17.0,
+      "end": 17.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 17.5,
+      "end": 18.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 18.0,
+      "end": 18.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 18.5,
+      "end": 19.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 19.0,
+      "end": 19.5,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 19.5,
+      "end": 20.0,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    },
+    {
+      "start": 20.0,
+      "end": 20.04,
+      "label": "no_chord",
+      "confidence": 0,
+      "margin": 0,
+      "fit": 0,
+      "rms": 0.0,
+      "alternatives": []
+    }
+  ],
+  "timeline": [
+    {
+      "start": 0.0,
+      "end": 20.04,
+      "label": "no_chord",
+      "confidence": 0
+    }
+  ],
+  "summary": {
+    "classified_chord_seconds": 0,
+    "ambiguous_seconds": 0,
+    "no_chord_seconds": 20.04,
+    "shared_D_major_B_minor_triad_seconds": 0,
+    "shared_fraction_among_classified": null,
+    "note": "D major/B natural minor share this diatonic triad set; result does not establish tonic or mode. C# diminished is unsupported."
+  },
+  "ground_truth": "unknown for real stems; predictions require human review"
+}

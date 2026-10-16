@@ -1,0 +1,71 @@
+{
+  "real_stem_sensitivity": {
+    "added_25_percent_vocal_stem": {
+      "changed_frames": 6,
+      "total_frames": 41,
+      "change_fraction": 0.14634146341463414,
+      "confident_reference_changed": 2,
+      "reference_chord_frames": 22
+    },
+    "added_D2_bass_sine_0.07_peak": {
+      "changed_frames": 7,
+      "total_frames": 41,
+      "change_fraction": 0.17073170731707318,
+      "confident_reference_changed": 1,
+      "reference_chord_frames": 22
+    },
+    "added_0.5s_percussion_bursts": {
+      "changed_frames": 4,
+      "total_frames": 41,
+      "change_fraction": 0.0975609756097561,
+      "confident_reference_changed": 0,
+      "reference_chord_frames": 22
+    }
+  },
+  "synthetic_probes": {
+    "overtone_0.15": {
+      "expected": [
+        "C:major",
+        "A:minor",
+        "G:major",
+        "D:major"
+      ],
+      "observed": [
+        "C:major",
+        "A:minor",
+        "G:major",
+        "D:major"
+      ],
+      "correct": 4
+    },
+    "overtone_0.7": {
+      "expected": [
+        "C:major",
+        "A:minor",
+        "G:major",
+        "D:major"
+      ],
+      "observed": [
+        "C:major",
+        "A:minor",
+        "G:major",
+        "D:major"
+      ],
+      "correct": 4
+    },
+    "four_250ms_chords": {
+      "expected": [
+        "C:major",
+        "A:minor",
+        "G:major",
+        "D:major"
+      ],
+      "observed_500ms_bins": [
+        "C:major",
+        "D:major"
+      ],
+      "limitation": "Four 250-ms changes cannot be resolved in two 500-ms bins"
+    }
+  },
+  "caution": "Real-stem labels have no ground truth. Perturbation label changes measure instability, not chord accuracy. Added vocal/bass/percussion signals are controlled hypothetical contaminants, not measured Demucs leakage."
+}

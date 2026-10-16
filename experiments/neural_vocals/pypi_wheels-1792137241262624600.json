@@ -1,0 +1,26 @@
+[
+  {
+    "comment_text": "",
+    "core-metadata": {
+      "sha256": "2e7d8038b7699fd5e1dc4b051ac5eff2ba0e0b4d8e73ba6dd5e3bcdfb9b16802"
+    },
+    "digests": {
+      "blake2b_256": "4a484513a1a5623a23e95f94abd675ed91cfb19989c58e9f6f7d03990f6caf3d",
+      "md5": "f426ffa7e53c6873b4fd4ba236b9ba06",
+      "sha256": "5713f62f781eebd8d597eb3f88b8bf9274e79eeabf63afb4a737abc6c84ad37b"
+    },
+    "downloads": -1,
+    "filename": "scipy-1.13.1-cp311-cp311-win_amd64.whl",
+    "has_sig": false,
+    "md5_digest": "f426ffa7e53c6873b4fd4ba236b9ba06",
+    "packagetype": "bdist_wheel",
+    "python_version": "cp311",
+    "requires_python": ">=3.9",
+    "size": 46196227,
+    "upload_time": "2024-05-23T03:20:16",
+    "upload_time_iso_8601": "2024-05-23T03:20:16.433205Z",
+    "url": "https://files.pythonhosted.org/packages/4a/48/4513a1a5623a23e95f94abd675ed91cfb19989c58e9f6f7d03990f6caf3d/scipy-1.13.1-cp311-cp311-win_amd64.whl",
+    "yanked": false,
+    "yanked_reason": null
+  }
+]

@@ -1,0 +1,122 @@
+[
+  {
+    "comment_text": "",
+    "core-metadata": {
+      "sha256": "5a27a0e272b1f6e597acbbf58e8da39ae350b2318db8df4cf49d72518e62eebc"
+    },
+    "digests": {
+      "blake2b_256": "3f6b5610004206cf7f8e7ad91c5a85a8c71b2f2f8051a0c0c4d5916b76d6cbb2",
+      "md5": "5fd325dd8704023c1110835d7a1b095a",
+      "sha256": "cd25bcecc4974d09257ffcd1f098ee778f7834c3ad767fe5db785be9a4aa9cb2"
+    },
+    "downloads": -1,
+    "filename": "numpy-1.26.4-cp311-cp311-win_amd64.whl",
+    "has_sig": false,
+    "md5_digest": "5fd325dd8704023c1110835d7a1b095a",
+    "packagetype": "bdist_wheel",
+    "python_version": "cp311",
+    "requires_python": ">=3.9",
+    "size": 15811913,
+    "upload_time": "2024-02-05T23:54:53",
+    "upload_time_iso_8601": "2024-02-05T23:54:53.933244Z",
+    "url": "https://files.pythonhosted.org/packages/3f/6b/5610004206cf7f8e7ad91c5a85a8c71b2f2f8051a0c0c4d5916b76d6cbb2/numpy-1.26.4-cp311-cp311-win_amd64.whl",
+    "yanked": false,
+    "yanked_reason": null
+  },
+  {
+    "comment_text": "",
+    "core-metadata": {
+      "sha256": "dc9f165315eabd5a0af0cadd6bd6b466661fe1bbda50afcdf48da4ee659cf227"
+    },
+    "digests": {
+      "blake2b_256": "5151b87caa939fedf307496e4dbf412f4b909af3d9ca8b189fc3b65c1faa456f",
+      "md5": "dbd4ecd2d06678a49e3f7d39512af802",
+      "sha256": "a12ef6f52841fd190a3e5602145b542d03507222f2c64ebb7ee92e8788093aef"
+    },
+    "downloads": -1,
+    "filename": "transformers-4.46.3-py3-none-any.whl",
+    "has_sig": false,
+    "md5_digest": "dbd4ecd2d06678a49e3f7d39512af802",
+    "packagetype": "bdist_wheel",
+    "python_version": "py3",
+    "requires_python": ">=3.8.0",
+    "size": 10034536,
+    "upload_time": "2024-11-18T22:12:57",
+    "upload_time_iso_8601": "2024-11-18T22:12:57.024571Z",
+    "url": "https://files.pythonhosted.org/packages/51/51/b87caa939fedf307496e4dbf412f4b909af3d9ca8b189fc3b65c1faa456f/transformers-4.46.3-py3-none-any.whl",
+    "yanked": false,
+    "yanked_reason": null
+  },
+  {
+    "comment_text": null,
+    "core-metadata": {
+      "sha256": "11daaefaf5d8da44f5ffe85b4d8087a79300d7f3a5349766abc12bce08106c1a"
+    },
+    "digests": {
+      "blake2b_256": "0fa42b309a6a9f6d4d8cfba583401c7c2f9ff887adb5d54d8e2e130274c0973f",
+      "md5": "bc62e690012680ce9887e1ed56b3a86f",
+      "sha256": "76bcec9f46259cedf888041b9886e257ae101c6268261b19fda8cfbc52bec9d1"
+    },
+    "downloads": -1,
+    "filename": "numba-0.61.2-cp311-cp311-win_amd64.whl",
+    "has_sig": false,
+    "md5_digest": "bc62e690012680ce9887e1ed56b3a86f",
+    "packagetype": "bdist_wheel",
+    "python_version": "cp311",
+    "requires_python": ">=3.10",
+    "size": 2831505,
+    "upload_time": "2025-04-09T02:57:50",
+    "upload_time_iso_8601": "2025-04-09T02:57:50.108537Z",
+    "url": "https://files.pythonhosted.org/packages/0f/a4/2b309a6a9f6d4d8cfba583401c7c2f9ff887adb5d54d8e2e130274c0973f/numba-0.61.2-cp311-cp311-win_amd64.whl",
+    "yanked": false,
+    "yanked_reason": null
+  },
+  {
+    "comment_text": "",
+    "core-metadata": {
+      "sha256": "25e2104ab520bc4483c0f83ff94620f08c2951cef77d581fae84a18f5640c293"
+    },
+    "digests": {
+      "blake2b_256": "5fc6258801143975a6d09a373f2641237992496e15567b907a4d401839d671b8",
+      "md5": "91906b4878324eb833061bbcaedaffcb",
+      "sha256": "d8489634d43c20cd0ad71330dde1d5bc7b9966937a263ff1ec1cebb90dc50955"
+    },
+    "downloads": -1,
+    "filename": "llvmlite-0.44.0-cp311-cp311-win_amd64.whl",
+    "has_sig": false,
+    "md5_digest": "91906b4878324eb833061bbcaedaffcb",
+    "packagetype": "bdist_wheel",
+    "python_version": "cp311",
+    "requires_python": ">=3.10",
+    "size": 30331193,
+    "upload_time": "2025-01-20T11:13:26",
+    "upload_time_iso_8601": "2025-01-20T11:13:26.976268Z",
+    "url": "https://files.pythonhosted.org/packages/5f/c6/258801143975a6d09a373f2641237992496e15567b907a4d401839d671b8/llvmlite-0.44.0-cp311-cp311-win_amd64.whl",
+    "yanked": false,
+    "yanked_reason": null
+  },
+  {
+    "comment_text": "",
+    "core-metadata": {
+      "sha256": "7a2eec23b5442d1cac788f0c25f7f5d90a10c9b7f7c861fe4faf396472baa002"
+    },
+    "digests": {
+      "blake2b_256": "23e14f0e237bf349c02ff9d1b6e7109f1a17f745263809b9714a8576dc17752b",
+      "md5": "fe4deac93d76cad514cf79b631e6d51a",
+      "sha256": "1f6882828231eca17f501c4dcd98a05abb3f03d157fbc0769c6911fe08b6cfd3"
+    },
+    "downloads": -1,
+    "filename": "matplotlib-3.9.4-cp311-cp311-win_amd64.whl",
+    "has_sig": false,
+    "md5_digest": "fe4deac93d76cad514cf79b631e6d51a",
+    "packagetype": "bdist_wheel",
+    "python_version": "cp311",
+    "requires_python": ">=3.9",
+    "size": 7838065,
+    "upload_time": "2024-12-13T05:54:58",
+    "upload_time_iso_8601": "2024-12-13T05:54:58.337556Z",
+    "url": "https://files.pythonhosted.org/packages/23/e1/4f0e237bf349c02ff9d1b6e7109f1a17f745263809b9714a8576dc17752b/matplotlib-3.9.4-cp311-cp311-win_amd64.whl",
+    "yanked": false,
+    "yanked_reason": null
+  }
+]

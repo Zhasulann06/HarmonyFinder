@@ -1,0 +1,50 @@
+[
+  {
+    "comment_text": "",
+    "core-metadata": {
+      "sha256": "d92df8260daf76a1198f5571b86cc3346ad6de7a8779951e3e76c0cffa73e4e5"
+    },
+    "digests": {
+      "blake2b_256": "6ec493f7309eb40a9299c59a6637f13c21b08e585c569fee85901ccd55ce00f5",
+      "md5": "412f779114f718509bd08a43358e7953",
+      "sha256": "7ecd1883040613d143494f27f199c11c7053a8a7f9fd2120568c5a98db926e61"
+    },
+    "downloads": -1,
+    "filename": "descript_audio_codec-1.0.0-py3-none-any.whl",
+    "has_sig": false,
+    "md5_digest": "412f779114f718509bd08a43358e7953",
+    "packagetype": "bdist_wheel",
+    "python_version": "py3",
+    "requires_python": null,
+    "size": 26933,
+    "upload_time": "2023-07-20T18:10:29",
+    "upload_time_iso_8601": "2023-07-20T18:10:29.436859Z",
+    "url": "https://files.pythonhosted.org/packages/6e/c4/93f7309eb40a9299c59a6637f13c21b08e585c569fee85901ccd55ce00f5/descript_audio_codec-1.0.0-py3-none-any.whl",
+    "yanked": false,
+    "yanked_reason": null
+  },
+  {
+    "comment_text": "",
+    "core-metadata": {
+      "sha256": "372061546038802fc02e6131343face2f5798518d672bd9c006d2677f4f56f4b"
+    },
+    "digests": {
+      "blake2b_256": "68b872a58cb3b241d869811be4f9328a37f1563dc9c48af8c0467cb681f9ed46",
+      "md5": "6586ec50a401fd7844f9b2c4bf989c37",
+      "sha256": "bb7a4e837f92395e43894d99a89406485325b88c6f158caf59e18876cf5b06ea"
+    },
+    "downloads": -1,
+    "filename": "descript_audiotools-0.7.2-py2.py3-none-any.whl",
+    "has_sig": false,
+    "md5_digest": "6586ec50a401fd7844f9b2c4bf989c37",
+    "packagetype": "bdist_wheel",
+    "python_version": "py2.py3",
+    "requires_python": null,
+    "size": 106704,
+    "upload_time": "2023-07-19T17:41:03",
+    "upload_time_iso_8601": "2023-07-19T17:41:03.108595Z",
+    "url": "https://files.pythonhosted.org/packages/68/b8/72a58cb3b241d869811be4f9328a37f1563dc9c48af8c0467cb681f9ed46/descript_audiotools-0.7.2-py2.py3-none-any.whl",
+    "yanked": false,
+    "yanked_reason": null
+  }
+]

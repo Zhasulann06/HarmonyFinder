@@ -1,0 +1,624 @@
+{
+  "version": "1",
+  "pip_version": "26.2.1",
+  "install": [
+    {
+      "download_info": {
+        "url": "file:///C:/Users/user/Desktop/MyProjects/HarmonyFinder/experiments/neural_vocals/assets/wheels/descript_audio_codec-1.0.0-py3-none-any.whl",
+        "archive_info": {
+          "hashes": {
+            "sha256": "7ecd1883040613d143494f27f199c11c7053a8a7f9fd2120568c5a98db926e61"
+          },
+          "hash": "sha256=7ecd1883040613d143494f27f199c11c7053a8a7f9fd2120568c5a98db926e61"
+        }
+      },
+      "is_direct": true,
+      "is_yanked": false,
+      "requested": true,
+      "metadata": {
+        "metadata_version": "2.1",
+        "name": "descript-audio-codec",
+        "version": "1.0.0",
+        "summary": "A high-quality general neural audio codec.",
+        "description": "# Descript Audio Codec (.dac): High-Fidelity Audio Compression with Improved RVQGAN\n\nThis repository contains training and inference scripts\nfor the Descript Audio Codec (.dac), a high fidelity general\nneural audio codec, introduced in the paper titled **High-Fidelity Audio Compression with Improved RVQGAN**.\n\n![](https://static.arxiv.org/static/browse/0.3.4/images/icons/favicon-16x16.png) [arXiv Paper: High-Fidelity Audio Compression with Improved RVQGAN\n](http://arxiv.org/abs/2306.06546) <br>\n📈 [Demo Site](https://descript.notion.site/Descript-Audio-Codec-11389fce0ce2419891d6591a68f814d5)<br>\n⚙ [Model Weights](https://github.com/descriptinc/descript-audio-codec/releases/download/0.0.1/weights.pth)\n\n👉 With Descript Audio Codec, you can compress **44.1 KHz audio** into discrete codes at a **low 8 kbps bitrate**.  <br>\n🤌 That's approximately **90x compression** while maintaining exceptional fidelity and minimizing artifacts.  <br>\n💪 Our universal model works on all domains (speech, environment, music, etc.), making it widely applicable to generative modeling of all audio.  <br>\n👌 It can be used as a drop-in replacement for EnCodec for all audio language modeling applications (such as AudioLMs, MusicLMs, MusicGen, etc.) <br>\n\n<p align=\"center\">\n<img src=\"./assets/comparsion_stats.png\" alt=\"Comparison of compressions approaches. Our model achieves a higher compression factor compared to all baseline methods. Our model has a ~90x compression factor compared to 32x compression factor of EnCodec and 64x of SoundStream. Note that we operate at a target bitrate of 8 kbps, whereas EnCodec operates at 24 kbps and SoundStream at 6 kbps. We also operate at 44.1 kHz, whereas EnCodec operates at 48 kHz and SoundStream operates at 24 kHz.\" width=35%></p>\n\n\n## Usage\n\n### Installation\n```\npip install descript-audio-codec\n```\nOR\n\n```\npip install git+https://github.com/descriptinc/descript-audio-codec\n```\n\n### Weights\nWeights are released as part of this repo under MIT license.\nWe release weights for models that can natively support 16 kHz, 24kHz, and 44.1kHz sampling rates.\nWeights are automatically downloaded when you first run `encode` or `decode` command. You can cache them using one of the following commands\n```bash\npython3 -m dac download # downloads the default 44kHz variant\npython3 -m dac download --model_type 44khz # downloads the 44kHz variant\npython3 -m dac download --model_type 24khz # downloads the 24kHz variant\npython3 -m dac download --model_type 16khz # downloads the 16kHz variant\n```\nWe provide a Dockerfile that installs all required dependencies for encoding and decoding. The build process caches the default model weights inside the image. This allows the image to be used without an internet connection. [Please refer to instructions below.](#docker-image)\n\n\n### Compress audio\n```\npython3 -m dac encode /path/to/input --output /path/to/output/codes\n```\n\nThis command will create `.dac` files with the same name as the input files.\nIt will also preserve the directory structure relative to input root and\nre-create it in the output directory. Please use `python -m dac encode --help`\nfor more options.\n\n### Reconstruct audio from compressed codes\n```\npython3 -m dac decode /path/to/output/codes --output /path/to/reconstructed_input\n```\n\nThis command will create `.wav` files with the same name as the input files.\nIt will also preserve the directory structure relative to input root and\nre-create it in the output directory. Please use `python -m dac decode --help`\nfor more options.\n\n### Programmatic Usage\n```py\nimport dac\nfrom audiotools import AudioSignal\n\n# Download a model\nmodel_path = dac.utils.download(model_type=\"44khz\")\nmodel = dac.DAC.load(model_path)\n\nmodel.to('cuda')\n\n# Load audio signal file\nsignal = AudioSignal('input.wav')\n\n# Encode audio signal as one long file\n# (may run out of GPU memory on long files)\nsignal.to(model.device)\n\nx = model.preprocess(signal.audio_data, signal.sample_rate)\nz, codes, latents, _, _ = model.encode(x)\n\n# Decode audio signal\ny = model.decode(z)\n\n# Alternatively, use the `compress` and `decompress` functions\n# to compress long files.\n\nsignal = signal.cpu()\nx = model.compress(signal)\n\n# Save and load to and from disk\nx.save(\"compressed.dac\")\nx = dac.DACFile.load(\"compressed.dac\")\n\n# Decompress it back to an AudioSignal\ny = model.decompress(x)\n\n# Write to file\ny.write('output.wav')\n```\n\n### Docker image\nWe provide a dockerfile to build a docker image with all the necessary\ndependencies.\n1. Building the image.\n    ```\n    docker build -t dac .\n    ```\n2. Using the image.\n\n    Usage on CPU:\n    ```\n    docker run dac <command>\n    ```\n\n    Usage on GPU:\n    ```\n    docker run --gpus=all dac <command>\n    ```\n\n    `<command>` can be one of the compression and reconstruction commands listed\n    above. For example, if you want to run compression,\n\n    ```\n    docker run --gpus=all dac python3 -m dac encode ...\n    ```\n\n\n## Training\nThe baseline model configuration can be trained using the following commands.\n\n### Pre-requisites\nPlease install the correct dependencies\n```\npip install -e \".[dev]\"\n```\n\n## Environment setup\n\nWe have provided a Dockerfile and docker compose setup that makes running experiments easy.\n\nTo build the docker image do:\n\n```\ndocker compose build\n```\n\nThen, to launch a container, do:\n\n```\ndocker compose run -p 8888:8888 -p 6006:6006 dev\n```\n\nThe port arguments (`-p`) are optional, but useful if you want to launch a Jupyter and Tensorboard instances within the container. The\ndefault password for Jupyter is `password`, and the current directory\nis mounted to `/u/home/src`, which also becomes the working directory.\n\nThen, run your training command.\n\n\n### Single GPU training\n```\nexport CUDA_VISIBLE_DEVICES=0\npython scripts/train.py --args.load conf/ablations/baseline.yml --save_path runs/baseline/\n```\n\n### Multi GPU training\n```\nexport CUDA_VISIBLE_DEVICES=0,1\ntorchrun --nproc_per_node gpu scripts/train.py --args.load conf/ablations/baseline.yml --save_path runs/baseline/\n```\n\n## Testing\nWe provide two test scripts to test CLI + training functionality. Please\nmake sure that the trainig pre-requisites are satisfied before launching these\ntests. To launch these tests please run\n```\npython -m pytest tests\n```\n\n## Results\n\n<p align=\"left\">\n<img src=\"./assets/objective_comparisons.png\" width=75%></p>\n",
+        "description_content_type": "text/markdown",
+        "keywords": [
+          "audio",
+          "compression",
+          "machine learning"
+        ],
+        "home_page": "https://github.com/descriptinc/descript-audio-codec",
+        "author": "Prem Seetharaman, Rithesh Kumar",
+        "author_email": "prem@descript.com",
+        "license": "MIT",
+        "license_file": [
+          "LICENSE"
+        ],
+        "classifier": [
+          "Intended Audience :: Developers",
+          "Natural Language :: English",
+          "Programming Language :: Python :: 3.7",
+          "Topic :: Artistic Software",
+          "Topic :: Multimedia",
+          "Topic :: Multimedia :: Sound/Audio",
+          "Topic :: Multimedia :: Sound/Audio :: Editors",
+          "Topic :: Software Development :: Libraries"
+        ],
+        "requires_dist": [
+          "argbind (>=0.3.7)",
+          "descript-audiotools (>=0.7.2)",
+          "einops",
+          "numpy",
+          "torch",
+          "torchaudio",
+          "tqdm",
+          "pytest ; extra == 'dev'",
+          "pytest-cov ; extra == 'dev'",
+          "pynvml ; extra == 'dev'",
+          "psutil ; extra == 'dev'",
+          "pandas ; extra == 'dev'",
+          "onnx ; extra == 'dev'",
+          "onnx-simplifier ; extra == 'dev'",
+          "seaborn ; extra == 'dev'",
+          "jupyterlab ; extra == 'dev'",
+          "watchdog ; extra == 'dev'",
+          "pesq ; extra == 'dev'",
+          "tabulate ; extra == 'dev'",
+          "encodec ; extra == 'dev'"
+        ],
+        "provides_extra": [
+          "dev"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "file:///C:/Users/user/Desktop/MyProjects/HarmonyFinder/experiments/neural_vocals/assets/wheels/descript_audiotools-0.7.2-py2.py3-none-any.whl",
+        "archive_info": {
+          "hashes": {
+            "sha256": "bb7a4e837f92395e43894d99a89406485325b88c6f158caf59e18876cf5b06ea"
+          },
+          "hash": "sha256=bb7a4e837f92395e43894d99a89406485325b88c6f158caf59e18876cf5b06ea"
+        }
+      },
+      "is_direct": true,
+      "is_yanked": false,
+      "requested": true,
+      "metadata": {
+        "metadata_version": "2.1",
+        "name": "descript-audiotools",
+        "version": "0.7.2",
+        "summary": "Utilities for handling audio.",
+        "description": "# AudioTools\n\nObject-oriented handling of audio signals, with fast augmentation routines, batching, padding, and more.\n\n## Installation\n```\npip install git+https://github.com/descriptinc/audiotools\n```\nOR\n```bash\ngit clone https://github.com/descriptinc/audiotools\ncd audiotools\npip install .\n```\n\n## Documentation\n\nFor documentation, see [the docs](https://descriptinc.github.io/audiotools/).\n\n### Deploying documentation\n\nTo build the documentation, do:\n\n```bash\ncd docs/\nmake html\nopen _build/html/index.html\n```\n\nOnce you're satisfied with your docs, push them to the gh-pages branch via\n\n```bash\ncd docs\nbash publish_docs.sh\n```\n\n## Quickstart\n\n```python\nimport audiotools\nfrom audiotools import AudioSignal\n\nsignal = AudioSignal(\"tests/audio/spk/f10_script4_produced.wav\", offset=5, duration=5)\nsignal.play() # Play back the signal in your terminal using ffplay\n\nsignal.low_pass(8000) # Low-pass the signal\nsignal.play() # Play back the low-passed version of the signal\n```\n\nFor more, see the [documentation](##Documentation).\n\n### Install hooks\n\nFirst install the pre-commit util:\n\nhttps://pre-commit.com/#install\n\n    pip install pre-commit  # with pip\n    brew install pre-commit  # on Mac\n\nThen install the git hooks\n\n    pre-commit install\n    # check .pre-commit-config.yaml for details of hooks\n\nUpon `git commit`, the pre-commit hooks will be run automatically on the stage files (i.e. added by `git add`)\n\n**N.B. By default, pre-commit checks only run on staged files**\n\nIf you need to run it on all files:\n\n    pre-commit run --all-files\n",
+        "description_content_type": "text/markdown",
+        "author": "Prem Seetharaman, Lucas Gestin",
+        "author_email": "prem@descript.com",
+        "license": "MIT",
+        "classifier": [
+          "Intended Audience :: Developers",
+          "Intended Audience :: Education",
+          "Intended Audience :: Science/Research",
+          "Natural Language :: English",
+          "Programming Language :: Python :: 3.7",
+          "Topic :: Artistic Software",
+          "Topic :: Multimedia",
+          "Topic :: Multimedia :: Sound/Audio",
+          "Topic :: Multimedia :: Sound/Audio :: Editors",
+          "Topic :: Software Development :: Libraries"
+        ],
+        "requires_dist": [
+          "argbind",
+          "numpy",
+          "soundfile",
+          "pyloudnorm",
+          "importlib-resources",
+          "scipy",
+          "torch",
+          "julius",
+          "torchaudio",
+          "ffmpy",
+          "ipython",
+          "rich",
+          "matplotlib",
+          "librosa",
+          "pystoi",
+          "torch-stoi",
+          "flatten-dict",
+          "markdown2",
+          "randomname",
+          "protobuf (<3.20,>=3.9.2)",
+          "tensorboard",
+          "tqdm",
+          "sphinx ; extra == 'docs'",
+          "sphinx-rtd-theme ; extra == 'docs'",
+          "myst-parser ; extra == 'docs'",
+          "myst-nb ; extra == 'docs'",
+          "sphinx-multiversion ; extra == 'docs'",
+          "pytest ; extra == 'tests'",
+          "pytest-cov ; extra == 'tests'",
+          "line-profiler ; extra == 'tests'",
+          "pesq ; extra == 'tests'",
+          "gradio (>=3.32.0) ; extra == 'tests'",
+          "transformers (>=4.23.1) ; extra == 'tests'",
+          "transformers (>=4.23.1) ; extra == 'whisper'"
+        ],
+        "provides_extra": [
+          "docs",
+          "tests",
+          "whisper"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/88/39/799be3f2f0f38cc727ee3b4f1445fe6d5e4133064ec2e4115069418a5bb6/cloudpickle-3.1.2-py3-none-any.whl",
+        "archive_info": {
+          "hashes": {
+            "sha256": "9acb47f6afd73f60dc1df93bb801b472f05ff42fa6c84167d25cb206be1fbf4a"
+          },
+          "hash": "sha256=9acb47f6afd73f60dc1df93bb801b472f05ff42fa6c84167d25cb206be1fbf4a"
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": false,
+      "metadata": {
+        "metadata_version": "2.4",
+        "name": "cloudpickle",
+        "version": "3.1.2",
+        "summary": "Pickler class to extend the standard pickle.Pickler functionality",
+        "description": "# cloudpickle\n\n[![Automated Tests](https://github.com/cloudpipe/cloudpickle/workflows/Automated%20Tests/badge.svg?branch=master&event=push)](https://github.com/cloudpipe/cloudpickle/actions)\n[![codecov.io](https://codecov.io/github/cloudpipe/cloudpickle/coverage.svg?branch=master)](https://codecov.io/github/cloudpipe/cloudpickle?branch=master)\n\n`cloudpickle` makes it possible to serialize Python constructs not supported\nby the default `pickle` module from the Python standard library.\n\n`cloudpickle` is especially useful for **cluster computing** where Python\ncode is shipped over the network to execute on remote hosts, possibly close\nto the data.\n\nAmong other things, `cloudpickle` supports pickling for **lambda functions**\nalong with **functions and classes defined interactively** in the\n`__main__` module (for instance in a script, a shell or a Jupyter notebook).\n\nCloudpickle can only be used to send objects between the **exact same version\nof Python**.\n\nUsing `cloudpickle` for **long-term object storage is not supported and\nstrongly discouraged.**\n\n**Security notice**: one should **only load pickle data from trusted sources** as\notherwise `pickle.load` can lead to arbitrary code execution resulting in a critical\nsecurity vulnerability.\n\n\nInstallation\n------------\n\nThe latest release of `cloudpickle` is available from\n[pypi](https://pypi.python.org/pypi/cloudpickle):\n\n    pip install cloudpickle\n\n\nExamples\n--------\n\nPickling a lambda expression:\n\n```python\n>>> import cloudpickle\n>>> squared = lambda x: x ** 2\n>>> pickled_lambda = cloudpickle.dumps(squared)\n\n>>> import pickle\n>>> new_squared = pickle.loads(pickled_lambda)\n>>> new_squared(2)\n4\n```\n\nPickling a function interactively defined in a Python shell session\n(in the `__main__` module):\n\n```python\n>>> CONSTANT = 42\n>>> def my_function(data: int) -> int:\n...     return data + CONSTANT\n...\n>>> pickled_function = cloudpickle.dumps(my_function)\n>>> depickled_function = pickle.loads(pickled_function)\n>>> depickled_function\n<function __main__.my_function(data:int) -> int>\n>>> depickled_function(43)\n85\n```\n\n\nOverriding pickle's serialization mechanism for importable constructs:\n----------------------------------------------------------------------\n\nAn important difference between `cloudpickle` and `pickle` is that\n`cloudpickle` can serialize a function or class **by value**, whereas `pickle`\ncan only serialize it **by reference**. Serialization by reference treats\nfunctions and classes as attributes of modules, and pickles them through\ninstructions that trigger the import of their module at load time.\nSerialization by reference is thus limited in that it assumes that the module\ncontaining the function or class is available/importable in the unpickling\nenvironment. This assumption breaks when pickling constructs defined in an\ninteractive session, a case that is automatically detected by `cloudpickle`,\nthat pickles such constructs **by value**.\n\nAnother case where the importability assumption is expected to break is when\ndeveloping a module in a distributed execution environment: the worker\nprocesses may not have access to the said module, for example if they live on a\ndifferent machine than the process in which the module is being developed. By\nitself, `cloudpickle` cannot detect such \"locally importable\" modules and\nswitch to serialization by value; instead, it relies on its default mode, which\nis serialization by reference. However, since `cloudpickle 2.0.0`, one can\nexplicitly specify modules for which serialization by value should be used,\nusing the\n`register_pickle_by_value(module)`/`/unregister_pickle_by_value(module)` API:\n\n```python\n>>> import cloudpickle\n>>> import my_module\n>>> cloudpickle.register_pickle_by_value(my_module)\n>>> cloudpickle.dumps(my_module.my_function)  # my_function is pickled by value\n>>> cloudpickle.unregister_pickle_by_value(my_module)\n>>> cloudpickle.dumps(my_module.my_function)  # my_function is pickled by reference\n```\n\nUsing this API, there is no need to re-install the new version of the module on\nall the worker nodes nor to restart the workers: restarting the client Python\nprocess with the new source code is enough.\n\nNote that this feature is still **experimental**, and may fail in the following\nsituations:\n\n- If the body of a function/class pickled by value contains an `import` statement:\n  ```python\n  >>> def f():\n  >>> ... from another_module import g\n  >>> ... # calling f in the unpickling environment may fail if another_module\n  >>> ... # is unavailable\n  >>> ... return g() + 1\n  ```\n\n- If a function pickled by reference uses a function pickled by value during its execution.\n\n\nRunning the tests\n-----------------\n\n- With `tox`, to test run the tests for all the supported versions of\n  Python and PyPy:\n\n      pip install tox\n      tox\n\n  or alternatively for a specific environment:\n\n      tox -e py312\n\n\n- With `pytest` to only run the tests for your current version of\n  Python:\n\n      pip install -r dev-requirements.txt\n      PYTHONPATH='.:tests' pytest\n\nHistory\n-------\n\n`cloudpickle` was initially developed by [picloud.com](http://web.archive.org/web/20140721022102/http://blog.picloud.com/2013/11/17/picloud-has-joined-dropbox/) and shipped as part of\nthe client SDK.\n\nA copy of `cloudpickle.py` was included as part of PySpark, the Python\ninterface to [Apache Spark](https://spark.apache.org/). Davies Liu, Josh\nRosen, Thom Neale and other Apache Spark developers improved it significantly,\nmost notably to add support for PyPy and Python 3.\n\nThe aim of the `cloudpickle` project is to make that work available to a wider\naudience outside of the Spark ecosystem and to make it easier to improve it\nfurther notably with the help of a dedicated non-regression test suite.\n\n",
+        "description_content_type": "text/markdown",
+        "home_page": "https://github.com/cloudpipe/cloudpickle",
+        "author": "The cloudpickle developer team",
+        "author_email": "cloudpipe@googlegroups.com",
+        "license": "BSD-3-Clause",
+        "license_file": [
+          "LICENSE"
+        ],
+        "classifier": [
+          "Development Status :: 5 - Production/Stable",
+          "Intended Audience :: Developers",
+          "License :: OSI Approved :: BSD License",
+          "Operating System :: POSIX",
+          "Operating System :: Microsoft :: Windows",
+          "Operating System :: MacOS :: MacOS X",
+          "Programming Language :: Python :: 3.8",
+          "Programming Language :: Python :: 3.9",
+          "Programming Language :: Python :: 3.10",
+          "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
+          "Programming Language :: Python :: 3.13",
+          "Programming Language :: Python :: 3.14",
+          "Programming Language :: Python :: Implementation :: CPython",
+          "Programming Language :: Python :: Implementation :: PyPy",
+          "Topic :: Software Development :: Libraries :: Python Modules",
+          "Topic :: Scientific/Engineering",
+          "Topic :: System :: Distributed Computing"
+        ],
+        "requires_python": ">=3.8"
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/86/43/efdb0bcb07c47826fa55857cec0deb743f74cd83b6ba5ec9e413505a72e6/julius-0.2.8-py3-none-any.whl",
+        "archive_info": {
+          "hashes": {
+            "sha256": "6891235cbc355e629d839f87489bff8ca46e57a0e7cc35abb909c7a2aa538c25"
+          },
+          "hash": "sha256=6891235cbc355e629d839f87489bff8ca46e57a0e7cc35abb909c7a2aa538c25"
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": false,
+      "metadata": {
+        "metadata_version": "2.4",
+        "name": "julius",
+        "version": "0.2.8",
+        "summary": "Nice DSP sweets: resampling, FFT Convolutions. All with PyTorch, differentiable and with CUDA support.",
+        "description": "# Julius, fast PyTorch based DSP for audio and 1D signals\n\n![linter badge](https://github.com/adefossez/julius/workflows/linter/badge.svg)\n![tests badge](https://github.com/adefossez/julius/workflows/tests/badge.svg)\n![cov badge](https://github.com/adefossez/julius/workflows/cov%3E90%25/badge.svg)\n\nJulius contains different Digital Signal Processing algorithms implemented\nwith PyTorch, so that they are differentiable and available on CUDA.\nNote that all the modules implemented here can be used with TorchScript.\n\nFor now, I have implemented:\n\n- [julius.resample](https://adefossez.github.io/julius/julius/resample.html): fast sinc resampling.\n- [julius.fftconv](https://adefossez.github.io/julius/julius/fftconv.html): FFT based convolutions.\n- [julius.lowpass](https://adefossez.github.io/julius/julius/lowpass.html): FIR low pass filter banks.\n- [julius.filters](https://adefossez.github.io/julius/julius/filters.html): FIR high pass and band pass filters.\n- [julius.bands](https://adefossez.github.io/julius/julius/bands.html): Decomposition of a waveform signal over mel-scale frequency bands.\n\nAlong that, you might found useful utilities in:\n\n- [julius.core](https://adefossez.github.io/julius/julius/core.html): DSP related functions.\n- [julius.utils](https://adefossez.github.io/julius/julius/utils.html): Generic utilities.\n\n<p align=\"center\">\n<img src=\"./logo.png\" alt=\"Representation of the convolutions filters used for the efficient resampling.\"\nwidth=\"500px\"></p>\n\n## News\n\n- 03/06/2026: __`julius` 0.2.8 released:__: Switching to pyproject.toml, now requires python >= 3.9. Bug fix with -O flag (thanks @aiknownc)\n- 19/09/2022: __`julius` 0.2.7 released:__: fixed ONNX compat (thanks @iver56). I know I missed the 0.2.6 one...\n- 28/07/2021: __`julius` 0.2.5 released:__: support for setting a custom output length when resampling.\n- 22/06/2021: __`julius` 0.2.4 released:__: adding highpass and band passfilters.\n  Extra linting and type checking of the code. New `unfold` implemention, up to\n  x6 faster FFT convolutions and more efficient memory usage.\n- 26/01/2021: __`julius` 0.2.2 released:__ fixing normalization of filters in lowpass and resample to avoid very low frequencies to be leaked.\n  Switch from zero padding to replicate padding (uses first/last value instead of 0) to avoid discontinuities with strong artifacts.\n- 20/01/2021: `julius` implementation of resampling is now officially <a href=\"https://github.com/pytorch/audio/pull/1087\">part of Torchaudio.</a>\n\n## Installation\n\n`julius` requires python 3.6. To install:\n```bash\npip3 install -U julius\n```\n\n\n## Usage\n\nSee the [Julius documentation][docs] for the usage of Julius. Hereafter you will find a few examples\nto get you quickly started:\n\n```python3\nimport julius\nimport torch\n\nsignal = torch.randn(6, 4, 1024)\n# Resample from a sample rate of 100 to 70. The old and new sample rate must be integers,\n# and resampling will be fast if they form an irreductible fraction with small numerator\n# and denominator (here 10 and 7). Any shape is supported, last dim is time.\nresampled_signal = julius.resample_frac(signal, 100, 70)\n\n# Low pass filter with a `0.1 * sample_rate` cutoff frequency.\nlow_freqs = julius.lowpass_filter(signal, 0.1)\n\n# Fast convolutions with FFT, useful for large kernels\nconv = julius.FFTConv1d(4, 10, 512)\nconvolved = conv(signal)\n\n# Decomposition over frequency bands in the Waveform domain\nbands = julius.split_bands(signal, n_bands=10, sample_rate=100)\n# Decomposition with n_bands frequency bands evenly spaced in mel space.\n# Input shape can be `[*, T]`, output will be `[n_bands, *, T]`.\nrandom_eq = (torch.rand(10, 1, 1, 1) * bands).sum(0)\n```\n\n## Algorithms\n\n### Resample\n\nThis is an implementation of the [sinc resample algorithm][resample] by Julius O. Smith.\nIt is the same algorithm than the one used in [resampy][resampy] but to run efficiently on GPU it\nis limited to fractional changes of the sample rate. It will be fast if the old and new sample rate\nare small after dividing them by their GCD. For instance going from a sample rate of 2000 to 3000 (2, 3 after removing the GCD)\nwill be extremely fast, while going from 20001 to 30001 will not.\nJulius resampling is faster than resampy even on CPU, and when running on GPU it makes resampling a completely negligible part of your pipeline\n(except of course for weird cases like going from a sample rate of 20001 to 30001).\n\n\n### FFTConv1d\n\nComputing convolutions with very large kernels (>= 128) and a stride of 1 can be much faster\nusing FFT. This implements the same API as `torch.nn.Conv1d` and `torch.nn.functional.conv1d`\nbut with a FFT backend. Dilation and groups are not supported.\nFFTConv will be faster on CPU even for relatively small tensors (a few dozen channels, kernel size\nof 128). On CUDA, due to the higher parallelism, regular convolution can be faster in many cases,\nbut for kernel sizes above 128, for a large number of channels or batch size, FFTConv1d\nwill eventually be faster (basically when you no longer have idle cores that can hide\nthe true complexity of the operation).\n\n### LowPass\n\nClassical Finite Impulse Reponse windowed sinc lowpass filter. It will use FFT convolutions automatically\nif the filter size is large enough. This is the basic block from which you can build\nhigh pass and band pass filters (see `julius.filters`).\n\n### Bands\n\nDecomposition of a signal over frequency bands in the waveform domain. This can be useful for\ninstance to perform parametric EQ (see [Usage](#usage) above).\n\n## Benchmarks\n\nYou can find speed tests (and comparisons to reference implementations) on the\n[benchmark][bench]. The CPU benchmarks are run on a Mac Book Pro 2020, with a 2.4 GHz\n8-core intel CPU i9. The GPUs benchmark are run on Nvidia V100 with 16GB of memory.\nWe also compare the validity of our implementations, as compared to reference ones like `resampy`\nor `torch.nn.Conv1d`.\n\n\n\n## Running tests\n\nClone this repository, then\n```bash\npip3 install .[dev]'\npython3 tests.py\n```\n\nTo run the benchmarks:\n```\npip3 install .[dev]'\npython3 -m bench.gen\n```\n\n\n## License\n\n`julius` is released under the MIT license.\n\n## Thanks\n\nThis package is named in the honor of\n[Julius O. Smith](https://ccrma.stanford.edu/~jos/),\nwhose books and website were a gold mine of information for me to learn about DSP. Go checkout his website if you want\nto learn more about DSP.\n\n\n[resample]: https://ccrma.stanford.edu/~jos/resample/resample.html\n[resampy]: https://resampy.readthedocs.io/\n[docs]:  https://adefossez.github.io/julius/julius/index.html\n[bench]:  ./bench.md\n",
+        "description_content_type": "text/markdown",
+        "author_email": "Alexandre Défossez <alexandre.defossez@gmail.com>",
+        "license": "MIT License",
+        "license_file": [
+          "LICENSE"
+        ],
+        "classifier": [
+          "License :: OSI Approved :: MIT License",
+          "Topic :: Multimedia :: Sound/Audio",
+          "Topic :: Scientific/Engineering"
+        ],
+        "requires_dist": [
+          "torch>=1.13.0",
+          "coverage>=7.0; extra == 'dev'",
+          "flake8>=5.0; extra == 'dev'",
+          "mypy>=1.0; extra == 'dev'",
+          "numpy>=1.21; extra == 'dev'",
+          "onnx>=1.13; extra == 'dev'",
+          "onnxruntime<1.20,>=1.16; (python_version < '3.10') and extra == 'dev'",
+          "onnxruntime>=1.16; (python_version >= '3.10') and extra == 'dev'",
+          "pdoc3>=0.10; extra == 'dev'",
+          "resampy==0.4.3; extra == 'dev'"
+        ],
+        "requires_python": ">=3.9.0",
+        "project_url": [
+          "Homepage, https://github.com/adefossez/julius"
+        ],
+        "provides_extra": [
+          "dev"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/62/a1/3d680cbfd5f4b8f15abc1d571870c5fc3e594bb582bc3b64ea099db13e56/jinja2-3.1.6-py3-none-any.whl",
+        "archive_info": {
+          "hashes": {
+            "sha256": "85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67"
+          },
+          "hash": "sha256=85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67"
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": false,
+      "metadata": {
+        "metadata_version": "2.4",
+        "name": "Jinja2",
+        "version": "3.1.6",
+        "summary": "A very fast and expressive template engine.",
+        "description": "# Jinja\n\nJinja is a fast, expressive, extensible templating engine. Special\nplaceholders in the template allow writing code similar to Python\nsyntax. Then the template is passed data to render the final document.\n\nIt includes:\n\n-   Template inheritance and inclusion.\n-   Define and import macros within templates.\n-   HTML templates can use autoescaping to prevent XSS from untrusted\n    user input.\n-   A sandboxed environment can safely render untrusted templates.\n-   AsyncIO support for generating templates and calling async\n    functions.\n-   I18N support with Babel.\n-   Templates are compiled to optimized Python code just-in-time and\n    cached, or can be compiled ahead-of-time.\n-   Exceptions point to the correct line in templates to make debugging\n    easier.\n-   Extensible filters, tests, functions, and even syntax.\n\nJinja's philosophy is that while application logic belongs in Python if\npossible, it shouldn't make the template designer's job difficult by\nrestricting functionality too much.\n\n\n## In A Nutshell\n\n```jinja\n{% extends \"base.html\" %}\n{% block title %}Members{% endblock %}\n{% block content %}\n  <ul>\n  {% for user in users %}\n    <li><a href=\"{{ user.url }}\">{{ user.username }}</a></li>\n  {% endfor %}\n  </ul>\n{% endblock %}\n```\n\n## Donate\n\nThe Pallets organization develops and supports Jinja and other popular\npackages. In order to grow the community of contributors and users, and\nallow the maintainers to devote more time to the projects, [please\ndonate today][].\n\n[please donate today]: https://palletsprojects.com/donate\n\n## Contributing\n\nSee our [detailed contributing documentation][contrib] for many ways to\ncontribute, including reporting issues, requesting features, asking or answering\nquestions, and making PRs.\n\n[contrib]: https://palletsprojects.com/contributing/\n\n",
+        "description_content_type": "text/markdown",
+        "maintainer_email": "Pallets <contact@palletsprojects.com>",
+        "license_file": [
+          "LICENSE.txt"
+        ],
+        "classifier": [
+          "Development Status :: 5 - Production/Stable",
+          "Environment :: Web Environment",
+          "Intended Audience :: Developers",
+          "License :: OSI Approved :: BSD License",
+          "Operating System :: OS Independent",
+          "Programming Language :: Python",
+          "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+          "Topic :: Text Processing :: Markup :: HTML",
+          "Typing :: Typed"
+        ],
+        "requires_dist": [
+          "MarkupSafe>=2.0",
+          "Babel>=2.7 ; extra == \"i18n\""
+        ],
+        "requires_python": ">=3.7",
+        "project_url": [
+          "Changes, https://jinja.palletsprojects.com/changes/",
+          "Chat, https://discord.gg/pallets",
+          "Documentation, https://jinja.palletsprojects.com/",
+          "Donate, https://palletsprojects.com/donate",
+          "Source, https://github.com/pallets/jinja/"
+        ],
+        "provides_extra": [
+          "i18n"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/9e/c9/b2622292ea83fbb4ec318f5b9ab867d0a28ab43c5717bb85b0a5f6b3b0a4/networkx-3.6.1-py3-none-any.whl",
+        "archive_info": {
+          "hashes": {
+            "sha256": "d47fbf302e7d9cbbb9e2555a0d267983d2aa476bac30e90dfbe5669bd57f3762"
+          },
+          "hash": "sha256=d47fbf302e7d9cbbb9e2555a0d267983d2aa476bac30e90dfbe5669bd57f3762"
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": false,
+      "metadata": {
+        "metadata_version": "2.4",
+        "name": "networkx",
+        "version": "3.6.1",
+        "dynamic": [
+          "license-file"
+        ],
+        "platform": [
+          "Linux",
+          "Mac OSX",
+          "Windows",
+          "Unix"
+        ],
+        "summary": "Python package for creating and manipulating graphs and networks",
+        "description": "NetworkX\n========\n\n\n.. image::\n    https://github.com/networkx/networkx/actions/workflows/test.yml/badge.svg?branch=main\n    :target: https://github.com/networkx/networkx/actions/workflows/test.yml\n\n.. image::\n    https://img.shields.io/pypi/v/networkx.svg?\n    :target: https://pypi.python.org/pypi/networkx\n\n.. image::\n    https://img.shields.io/pypi/l/networkx.svg?\n    :target: https://github.com/networkx/networkx/blob/main/LICENSE.txt\n\n.. image::\n    https://img.shields.io/pypi/pyversions/networkx.svg?\n    :target: https://pypi.python.org/pypi/networkx\n\n.. image::\n    https://img.shields.io/github/labels/networkx/networkx/good%20first%20issue?color=green&label=contribute\n    :target: https://github.com/networkx/networkx/contribute\n\n.. image::\n    https://insights.linuxfoundation.org/api/badge/health-score?project=networkx\n    :target: https://insights.linuxfoundation.org/project/networkx\n\n\nNetworkX is a Python package for the creation, manipulation,\nand study of the structure, dynamics, and functions\nof complex networks.\n\n- **Website (including documentation):** https://networkx.org\n- **Mailing list:** https://groups.google.com/forum/#!forum/networkx-discuss\n- **Source:** https://github.com/networkx/networkx\n- **Bug reports:** https://github.com/networkx/networkx/issues\n- **Report a security vulnerability:** https://tidelift.com/security\n- **Tutorial:** https://networkx.org/documentation/latest/tutorial.html\n- **GitHub Discussions:** https://github.com/networkx/networkx/discussions\n- **Discord (Scientific Python) invite link:** https://discord.com/invite/vur45CbwMz\n- **NetworkX meetings calendar (open to all):** https://scientific-python.org/calendars/networkx.ics\n\nSimple example\n--------------\n\nFind the shortest path between two nodes in an undirected graph:\n\n.. code:: pycon\n\n    >>> import networkx as nx\n    >>> G = nx.Graph()\n    >>> G.add_edge(\"A\", \"B\", weight=4)\n    >>> G.add_edge(\"B\", \"D\", weight=2)\n    >>> G.add_edge(\"A\", \"C\", weight=3)\n    >>> G.add_edge(\"C\", \"D\", weight=4)\n    >>> nx.shortest_path(G, \"A\", \"D\", weight=\"weight\")\n    ['A', 'B', 'D']\n\nInstall\n-------\n\nInstall the latest released version of NetworkX:\n\n.. code:: shell\n\n    $ pip install networkx\n\nInstall with all optional dependencies:\n\n.. code:: shell\n\n    $ pip install networkx[default]\n\nFor additional details,\nplease see the `installation guide <https://networkx.org/documentation/stable/install.html>`_.\n\nBugs\n----\n\nPlease report any bugs that you find `here <https://github.com/networkx/networkx/issues>`_.\nOr, even better, fork the repository on `GitHub <https://github.com/networkx/networkx>`_\nand create a pull request (PR). We welcome all changes, big or small, and we\nwill help you make the PR if you are new to `git` (just ask on the issue and/or\nsee the `contributor guide <https://networkx.org/documentation/latest/developer/contribute.html>`_).\n\nLicense\n-------\n\nReleased under the `3-clause BSD license <https://github.com/networkx/networkx/blob/main/LICENSE.txt>`_::\n\n    Copyright (c) 2004-2025, NetworkX Developers\n    Aric Hagberg <hagberg@lanl.gov>\n    Dan Schult <dschult@colgate.edu>\n    Pieter Swart <swart@lanl.gov>\n",
+        "description_content_type": "text/x-rst",
+        "keywords": [
+          "Networks",
+          "Graph Theory",
+          "Mathematics",
+          "network",
+          "graph",
+          "discrete mathematics",
+          "math"
+        ],
+        "author_email": "Aric Hagberg <hagberg@lanl.gov>",
+        "maintainer_email": "NetworkX Developers <networkx-discuss@googlegroups.com>",
+        "license_expression": "BSD-3-Clause",
+        "license_file": [
+          "LICENSE.txt"
+        ],
+        "classifier": [
+          "Development Status :: 5 - Production/Stable",
+          "Intended Audience :: Developers",
+          "Intended Audience :: Science/Research",
+          "Operating System :: OS Independent",
+          "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
+          "Programming Language :: Python :: 3.13",
+          "Programming Language :: Python :: 3.14",
+          "Programming Language :: Python :: 3 :: Only",
+          "Topic :: Software Development :: Libraries :: Python Modules",
+          "Topic :: Scientific/Engineering :: Bio-Informatics",
+          "Topic :: Scientific/Engineering :: Information Analysis",
+          "Topic :: Scientific/Engineering :: Mathematics",
+          "Topic :: Scientific/Engineering :: Physics"
+        ],
+        "requires_dist": [
+          "asv; extra == \"benchmarking\"",
+          "virtualenv; extra == \"benchmarking\"",
+          "numpy>=1.25; extra == \"default\"",
+          "scipy>=1.11.2; extra == \"default\"",
+          "matplotlib>=3.8; extra == \"default\"",
+          "pandas>=2.0; extra == \"default\"",
+          "pre-commit>=4.1; extra == \"developer\"",
+          "mypy>=1.15; extra == \"developer\"",
+          "sphinx>=8.0; extra == \"doc\"",
+          "pydata-sphinx-theme>=0.16; extra == \"doc\"",
+          "sphinx-gallery>=0.18; extra == \"doc\"",
+          "numpydoc>=1.8.0; extra == \"doc\"",
+          "pillow>=10; extra == \"doc\"",
+          "texext>=0.6.7; extra == \"doc\"",
+          "myst-nb>=1.1; extra == \"doc\"",
+          "intersphinx-registry; extra == \"doc\"",
+          "osmnx>=2.0.0; extra == \"example\"",
+          "momepy>=0.7.2; extra == \"example\"",
+          "contextily>=1.6; extra == \"example\"",
+          "seaborn>=0.13; extra == \"example\"",
+          "cairocffi>=1.7; extra == \"example\"",
+          "igraph>=0.11; extra == \"example\"",
+          "scikit-learn>=1.5; extra == \"example\"",
+          "iplotx>=0.9.0; extra == \"example\"",
+          "lxml>=4.6; extra == \"extra\"",
+          "pygraphviz>=1.14; extra == \"extra\"",
+          "pydot>=3.0.1; extra == \"extra\"",
+          "sympy>=1.10; extra == \"extra\"",
+          "build>=0.10; extra == \"release\"",
+          "twine>=4.0; extra == \"release\"",
+          "wheel>=0.40; extra == \"release\"",
+          "changelist==0.5; extra == \"release\"",
+          "pytest>=7.2; extra == \"test\"",
+          "pytest-cov>=4.0; extra == \"test\"",
+          "pytest-xdist>=3.0; extra == \"test\"",
+          "pytest-mpl; extra == \"test-extras\"",
+          "pytest-randomly; extra == \"test-extras\""
+        ],
+        "requires_python": "!=3.14.1,>=3.11",
+        "project_url": [
+          "Homepage, https://networkx.org/",
+          "Bug Tracker, https://github.com/networkx/networkx/issues",
+          "Documentation, https://networkx.org/documentation/stable/",
+          "Source Code, https://github.com/networkx/networkx"
+        ],
+        "provides_extra": [
+          "benchmarking",
+          "default",
+          "developer",
+          "doc",
+          "example",
+          "extra",
+          "release",
+          "test",
+          "test-extras"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/a2/09/77d55d46fd61b4a135c444fc97158ef34a095e5681d0a6c10b75bf356191/sympy-1.14.0-py3-none-any.whl",
+        "archive_info": {
+          "hashes": {
+            "sha256": "e091cc3e99d2141a0ba2847328f5479b05d94a6635cb96148ccb3f34671bd8f5"
+          },
+          "hash": "sha256=e091cc3e99d2141a0ba2847328f5479b05d94a6635cb96148ccb3f34671bd8f5"
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": false,
+      "metadata": {
+        "metadata_version": "2.4",
+        "name": "sympy",
+        "version": "1.14.0",
+        "dynamic": [
+          "author",
+          "author-email",
+          "classifier",
+          "description",
+          "description-content-type",
+          "home-page",
+          "keywords",
+          "license",
+          "license-file",
+          "project-url",
+          "provides-extra",
+          "requires-dist",
+          "requires-python",
+          "summary"
+        ],
+        "summary": "Computer algebra system (CAS) in Python",
+        "description": "# SymPy\n\n[![pypi version](https://img.shields.io/pypi/v/sympy.svg)](https://pypi.python.org/pypi/sympy)\n[![Join the chat at https://gitter.im/sympy/sympy](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/sympy/sympy?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)\n[![Zenodo Badge](https://zenodo.org/badge/18918/sympy/sympy.svg)](https://zenodo.org/badge/latestdoi/18918/sympy/sympy)\n[![Downloads](https://pepy.tech/badge/sympy/month)](https://pepy.tech/project/sympy)\n[![GitHub Issues](https://img.shields.io/badge/issue_tracking-github-blue.svg)](https://github.com/sympy/sympy/issues)\n[![Git Tutorial](https://img.shields.io/badge/PR-Welcome-%23FF8300.svg?)](https://git-scm.com/book/en/v2/GitHub-Contributing-to-a-Project)\n[![Powered by NumFocus](https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A)](https://numfocus.org)\n[![Commits since last release](https://img.shields.io/github/commits-since/sympy/sympy/latest.svg?longCache=true&style=flat-square&logo=git&logoColor=fff)](https://github.com/sympy/sympy/releases)\n\n[![SymPy Banner](https://github.com/sympy/sympy/raw/master/banner.svg)](https://sympy.org/)\n\n\nSee the [AUTHORS](AUTHORS) file for the list of authors.\n\nAnd many more people helped on the SymPy mailing list, reported bugs,\nhelped organize SymPy's participation in the Google Summer of Code, the\nGoogle Highly Open Participation Contest, Google Code-In, wrote and\nblogged about SymPy...\n\nLicense: New BSD License (see the [LICENSE](LICENSE) file for details) covers all\nfiles in the sympy repository unless stated otherwise.\n\nOur mailing list is at\n<https://groups.google.com/forum/?fromgroups#!forum/sympy>.\n\nWe have a community chat at [Gitter](https://gitter.im/sympy/sympy). Feel\nfree to ask us anything there. We have a very welcoming and helpful\ncommunity.\n\n## Download\n\nThe recommended installation method is through Anaconda,\n<https://www.anaconda.com/products/distribution>\n\nYou can also get the latest version of SymPy from\n<https://pypi.python.org/pypi/sympy/>\n\nTo get the git version do\n\n    $ git clone https://github.com/sympy/sympy.git\n\nFor other options (tarballs, debs, etc.), see\n<https://docs.sympy.org/dev/install.html>.\n\n## Documentation and Usage\n\nFor in-depth instructions on installation and building the\ndocumentation, see the [SymPy Documentation Style Guide](https://docs.sympy.org/dev/documentation-style-guide.html).\n\nEverything is at:\n\n<https://docs.sympy.org/>\n\nYou can generate everything at the above site in your local copy of\nSymPy by:\n\n    $ cd doc\n    $ make html\n\nThen the docs will be in <span class=\"title-ref\">\\_build/html</span>. If\nyou don't want to read that, here is a short usage:\n\nFrom this directory, start Python and:\n\n``` python\n>>> from sympy import Symbol, cos\n>>> x = Symbol('x')\n>>> e = 1/cos(x)\n>>> print(e.series(x, 0, 10))\n1 + x**2/2 + 5*x**4/24 + 61*x**6/720 + 277*x**8/8064 + O(x**10)\n```\n\nSymPy also comes with a console that is a simple wrapper around the\nclassic python console (or IPython when available) that loads the SymPy\nnamespace and executes some common commands for you.\n\nTo start it, issue:\n\n    $ bin/isympy\n\nfrom this directory, if SymPy is not installed or simply:\n\n    $ isympy\n\nif SymPy is installed.\n\n## Installation\n\nTo install SymPy using PyPI, run the following command:\n\n    $ pip install sympy\n\nTo install SymPy using Anaconda, run the following command:\n\n    $ conda install -c anaconda sympy\n\nTo install SymPy from GitHub source, first clone SymPy using `git`:\n\n    $ git clone https://github.com/sympy/sympy.git\n\nThen, in the `sympy` repository that you cloned, simply run:\n\n    $ pip install .\n\nSee <https://docs.sympy.org/dev/install.html> for more information.\n\n## Contributing\n\nWe welcome contributions from anyone, even if you are new to open\nsource. Please read our [Introduction to Contributing](https://docs.sympy.org/dev/contributing/introduction-to-contributing.html)\npage and the [SymPy Documentation Style Guide](https://docs.sympy.org/dev/documentation-style-guide.html). If you\nare new and looking for some way to contribute, a good place to start is\nto look at the issues tagged [Easy to Fix](https://github.com/sympy/sympy/issues?q=is%3Aopen+is%3Aissue+label%3A%22Easy+to+Fix%22).\n\nPlease note that all participants in this project are expected to follow\nour Code of Conduct. By participating in this project you agree to abide\nby its terms. See [CODE\\_OF\\_CONDUCT.md](CODE_OF_CONDUCT.md).\n\n## Tests\n\nTo execute all tests, run:\n\n    $./setup.py test\n\nin the current directory.\n\nFor the more fine-grained running of tests or doctests, use `bin/test`\nor respectively `bin/doctest`. The master branch is automatically tested\nby GitHub Actions.\n\nTo test pull requests, use\n[sympy-bot](https://github.com/sympy/sympy-bot).\n\n## Regenerate Experimental <span class=\"title-ref\">LaTeX</span> Parser/Lexer\n\nThe parser and lexer were generated with the [ANTLR4](http://antlr4.org)\ntoolchain in `sympy/parsing/latex/_antlr` and checked into the repo.\nPresently, most users should not need to regenerate these files, but\nif you plan to work on this feature, you will need the `antlr4`\ncommand-line tool (and you must ensure that it is in your `PATH`).\nOne way to get it is:\n\n    $ conda install -c conda-forge antlr=4.11.1\n\nAlternatively, follow the instructions on the ANTLR website and download\nthe `antlr-4.11.1-complete.jar`. Then export the `CLASSPATH` as instructed\nand instead of creating `antlr4` as an alias, make it an executable file\nwith the following contents:\n``` bash\n#!/bin/bash\njava -jar /usr/local/lib/antlr-4.11.1-complete.jar \"$@\"\n```\n\nAfter making changes to `sympy/parsing/latex/LaTeX.g4`, run:\n\n    $ ./setup.py antlr\n\n## Clean\n\nTo clean everything (thus getting the same tree as in the repository):\n\n    $ git clean -Xdf\n\nwhich will clear everything ignored by `.gitignore`, and:\n\n    $ git clean -df\n\nto clear all untracked files. You can revert the most recent changes in\ngit with:\n\n    $ git reset --hard\n\nWARNING: The above commands will all clear changes you may have made,\nand you will lose them forever. Be sure to check things with `git\nstatus`, `git diff`, `git clean -Xn`, and `git clean -n` before doing any\nof those.\n\n## Bugs\n\nOur issue tracker is at <https://github.com/sympy/sympy/issues>. Please\nreport any bugs that you find. Or, even better, fork the repository on\nGitHub and create a pull request. We welcome all changes, big or small,\nand we will help you make the pull request if you are new to git (just\nask on our mailing list or Gitter Channel). If you further have any queries, you can find answers\non Stack Overflow using the [sympy](https://stackoverflow.com/questions/tagged/sympy) tag.\n\n## Brief History\n\nSymPy was started by Ondřej Čertík in 2005, he wrote some code during\nthe summer, then he wrote some more code during summer 2006. In February\n2007, Fabian Pedregosa joined the project and helped fix many things,\ncontributed documentation, and made it alive again. 5 students (Mateusz\nPaprocki, Brian Jorgensen, Jason Gedge, Robert Schwarz, and Chris Wu)\nimproved SymPy incredibly during summer 2007 as part of the Google\nSummer of Code. Pearu Peterson joined the development during the summer\n2007 and he has made SymPy much more competitive by rewriting the core\nfrom scratch, which has made it from 10x to 100x faster. Jurjen N.E. Bos\nhas contributed pretty-printing and other patches. Fredrik Johansson has\nwritten mpmath and contributed a lot of patches.\n\nSymPy has participated in every Google Summer of Code since 2007. You\ncan see <https://github.com/sympy/sympy/wiki#google-summer-of-code> for\nfull details. Each year has improved SymPy by bounds. Most of SymPy's\ndevelopment has come from Google Summer of Code students.\n\nIn 2011, Ondřej Čertík stepped down as lead developer, with Aaron\nMeurer, who also started as a Google Summer of Code student, taking his\nplace. Ondřej Čertík is still active in the community but is too busy\nwith work and family to play a lead development role.\n\nSince then, a lot more people have joined the development and some\npeople have also left. You can see the full list in doc/src/aboutus.rst,\nor online at:\n\n<https://docs.sympy.org/dev/aboutus.html#sympy-development-team>\n\nThe git history goes back to 2007 when development moved from svn to hg.\nTo see the history before that point, look at\n<https://github.com/sympy/sympy-old>.\n\nYou can use git to see the biggest developers. The command:\n\n    $ git shortlog -ns\n\nwill show each developer, sorted by commits to the project. The command:\n\n    $ git shortlog -ns --since=\"1 year\"\n\nwill show the top developers from the last year.\n\n## Citation\n\nTo cite SymPy in publications use\n\n> Meurer A, Smith CP, Paprocki M, Čertík O, Kirpichev SB, Rocklin M,\n> Kumar A, Ivanov S, Moore JK, Singh S, Rathnayake T, Vig S, Granger BE,\n> Muller RP, Bonazzi F, Gupta H, Vats S, Johansson F, Pedregosa F, Curry\n> MJ, Terrel AR, Roučka Š, Saboo A, Fernando I, Kulal S, Cimrman R,\n> Scopatz A. (2017) SymPy: symbolic computing in Python. *PeerJ Computer\n> Science* 3:e103 <https://doi.org/10.7717/peerj-cs.103>\n\nA BibTeX entry for LaTeX users is\n\n``` bibtex\n@article{10.7717/peerj-cs.103,\n title = {SymPy: symbolic computing in Python},\n author = {Meurer, Aaron and Smith, Christopher P. and Paprocki, Mateusz and \\v{C}ert\\'{i}k, Ond\\v{r}ej and Kirpichev, Sergey B. and Rocklin, Matthew and Kumar, Amit and Ivanov, Sergiu and Moore, Jason K. and Singh, Sartaj and Rathnayake, Thilina and Vig, Sean and Granger, Brian E. and Muller, Richard P. and Bonazzi, Francesco and Gupta, Harsh and Vats, Shivam and Johansson, Fredrik and Pedregosa, Fabian and Curry, Matthew J. and Terrel, Andy R. and Rou\\v{c}ka, \\v{S}t\\v{e}p\\'{a}n and Saboo, Ashutosh and Fernando, Isuru and Kulal, Sumith and Cimrman, Robert and Scopatz, Anthony},\n year = 2017,\n month = Jan,\n keywords = {Python, Computer algebra system, Symbolics},\n abstract = {\n            SymPy is an open-source computer algebra system written in pure Python. It is built with a focus on extensibility and ease of use, through both interactive and programmatic applications. These characteristics have led SymPy to become a popular symbolic library for the scientific Python ecosystem. This paper presents the architecture of SymPy, a description of its features, and a discussion of select submodules. The supplementary material provides additional examples and further outlines details of the architecture and features of SymPy.\n         },\n volume = 3,\n pages = {e103},\n journal = {PeerJ Computer Science},\n issn = {2376-5992},\n url = {https://doi.org/10.7717/peerj-cs.103},\n doi = {10.7717/peerj-cs.103}\n}\n```\n\nSymPy is BSD licensed, so you are free to use it whatever you like, be\nit academic, commercial, creating forks or derivatives, as long as you\ncopy the BSD statement if you redistribute it (see the LICENSE file for\ndetails). That said, although not required by the SymPy license, if it\nis convenient for you, please cite SymPy when using it in your work and\nalso consider contributing all your changes back, so that we can\nincorporate it and all of us will benefit in the end.\n",
+        "description_content_type": "text/markdown",
+        "keywords": [
+          "Math",
+          "CAS"
+        ],
+        "home_page": "https://sympy.org",
+        "author": "SymPy development team",
+        "author_email": "sympy@googlegroups.com",
+        "license": "BSD",
+        "license_file": [
+          "LICENSE",
+          "AUTHORS"
+        ],
+        "classifier": [
+          "License :: OSI Approved :: BSD License",
+          "Operating System :: OS Independent",
+          "Programming Language :: Python",
+          "Topic :: Scientific/Engineering",
+          "Topic :: Scientific/Engineering :: Mathematics",
+          "Topic :: Scientific/Engineering :: Physics",
+          "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3.9",
+          "Programming Language :: Python :: 3.10",
+          "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
+          "Programming Language :: Python :: 3.13",
+          "Programming Language :: Python :: 3 :: Only",
+          "Programming Language :: Python :: Implementation :: CPython",
+          "Programming Language :: Python :: Implementation :: PyPy"
+        ],
+        "requires_dist": [
+          "mpmath<1.4,>=1.1.0",
+          "pytest>=7.1.0; extra == \"dev\"",
+          "hypothesis>=6.70.0; extra == \"dev\""
+        ],
+        "requires_python": ">=3.9",
+        "project_url": [
+          "Source, https://github.com/sympy/sympy"
+        ],
+        "provides_extra": [
+          "dev"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/43/e3/7d92a15f894aa0c9c4b49b8ee9ac9850d6e63b03c9c32c0367a13ae62209/mpmath-1.3.0-py3-none-any.whl",
+        "archive_info": {
+          "hashes": {
+            "sha256": "a0b2b9fe80bbcd81a6647ff13108738cfb482d481d826cc0e02f5b35e5c88d2c"
+          },
+          "hash": "sha256=a0b2b9fe80bbcd81a6647ff13108738cfb482d481d826cc0e02f5b35e5c88d2c"
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": false,
+      "metadata": {
+        "metadata_version": "2.1",
+        "name": "mpmath",
+        "version": "1.3.0",
+        "summary": "Python library for arbitrary-precision floating-point arithmetic",
+        "description": "mpmath\n======\n\n|pypi version| |Build status| |Code coverage status| |Zenodo Badge|\n\n.. |pypi version| image:: https://img.shields.io/pypi/v/mpmath.svg\n   :target: https://pypi.python.org/pypi/mpmath\n.. |Build status| image:: https://github.com/fredrik-johansson/mpmath/workflows/test/badge.svg\n   :target: https://github.com/fredrik-johansson/mpmath/actions?workflow=test\n.. |Code coverage status| image:: https://codecov.io/gh/fredrik-johansson/mpmath/branch/master/graph/badge.svg\n   :target: https://codecov.io/gh/fredrik-johansson/mpmath\n.. |Zenodo Badge| image:: https://zenodo.org/badge/2934512.svg\n   :target: https://zenodo.org/badge/latestdoi/2934512\n\nA Python library for arbitrary-precision floating-point arithmetic.\n\nWebsite: http://mpmath.org/\nMain author: Fredrik Johansson <fredrik.johansson@gmail.com>\n\nMpmath is free software released under the New BSD License (see the\nLICENSE file for details)\n\n0. History and credits\n----------------------\n\nThe following people (among others) have contributed major patches\nor new features to mpmath:\n\n* Pearu Peterson <pearu.peterson@gmail.com>\n* Mario Pernici <mario.pernici@mi.infn.it>\n* Ondrej Certik <ondrej@certik.cz>\n* Vinzent Steinberg <vinzent.steinberg@gmail.cm>\n* Nimish Telang <ntelang@gmail.com>\n* Mike Taschuk <mtaschuk@ece.ualberta.ca>\n* Case Van Horsen <casevh@gmail.com>\n* Jorn Baayen <jorn.baayen@gmail.com>\n* Chris Smith <smichr@gmail.com>\n* Juan Arias de Reyna <arias@us.es>\n* Ioannis Tziakos <itziakos@gmail.com>\n* Aaron Meurer <asmeurer@gmail.com>\n* Stefan Krastanov <krastanov.stefan@gmail.com>\n* Ken Allen <ken.allen@sbcglobal.net>\n* Timo Hartmann <thartmann15@gmail.com>\n* Sergey B Kirpichev <skirpichev@gmail.com>\n* Kris Kuhlman <kristopher.kuhlman@gmail.com>\n* Paul Masson <paulmasson@analyticphysics.com>\n* Michael Kagalenko <michael.kagalenko@gmail.com>\n* Jonathan Warner <warnerjon12@gmail.com>\n* Max Gaukler <max.gaukler@fau.de>\n* Guillermo Navas-Palencia <g.navas.palencia@gmail.com>\n* Nike Dattani <nike@hpqc.org>\n\nNumerous other people have contributed by reporting bugs,\nrequesting new features, or suggesting improvements to the\ndocumentation.\n\nFor a detailed changelog, including individual contributions,\nsee the CHANGES file.\n\nFredrik's work on mpmath during summer 2008 was sponsored by Google\nas part of the Google Summer of Code program.\n\nFredrik's work on mpmath during summer 2009 was sponsored by the\nAmerican Institute of Mathematics under the support of the National Science\nFoundation Grant No. 0757627 (FRG: L-functions and Modular Forms).\n\nAny opinions, findings, and conclusions or recommendations expressed in this\nmaterial are those of the author(s) and do not necessarily reflect the\nviews of the sponsors.\n\nCredit also goes to:\n\n* The authors of the GMP library and the Python wrapper\n  gmpy, enabling mpmath to become much faster at\n  high precision\n* The authors of MPFR, pari/gp, MPFUN, and other arbitrary-\n  precision libraries, whose documentation has been helpful\n  for implementing many of the algorithms in mpmath\n* Wikipedia contributors; Abramowitz & Stegun; Gradshteyn & Ryzhik;\n  Wolfram Research for MathWorld and the Wolfram Functions site.\n  These are the main references used for special functions\n  implementations.\n* George Brandl for developing the Sphinx documentation tool\n  used to build mpmath's documentation\n\nRelease history:\n\n* Version 1.3.0 released on March 7, 2023\n* Version 1.2.0 released on February 1, 2021\n* Version 1.1.0 released on December 11, 2018\n* Version 1.0.0 released on September 27, 2017\n* Version 0.19 released on June 10, 2014\n* Version 0.18 released on December 31, 2013\n* Version 0.17 released on February 1, 2011\n* Version 0.16 released on September 24, 2010\n* Version 0.15 released on June 6, 2010\n* Version 0.14 released on February 5, 2010\n* Version 0.13 released on August 13, 2009\n* Version 0.12 released on June 9, 2009\n* Version 0.11 released on January 26, 2009\n* Version 0.10 released on October 15, 2008\n* Version 0.9 released on August 23, 2008\n* Version 0.8 released on April 20, 2008\n* Version 0.7 released on March 12, 2008\n* Version 0.6 released on January 13, 2008\n* Version 0.5 released on November 24, 2007\n* Version 0.4 released on November 3, 2007\n* Version 0.3 released on October 5, 2007\n* Version 0.2 released on October 2, 2007\n* Version 0.1 released on September 27, 2007\n\n1. Download & installation\n--------------------------\n\nMpmath requires Python 2.7 or 3.5 (or later versions). It has been tested\nwith CPython 2.7, 3.5 through 3.7 and for PyPy.\n\nThe latest release of mpmath can be downloaded from the mpmath\nwebsite and from https://github.com/fredrik-johansson/mpmath/releases\n\nIt should also be available in the Python Package Index at\nhttps://pypi.python.org/pypi/mpmath\n\nTo install latest release of Mpmath with pip, simply run\n\n``pip install mpmath``\n\nOr unpack the mpmath archive and run\n\n``python setup.py install``\n\nMpmath can also be installed using\n\n``python -m easy_install mpmath``\n\nThe latest development code is available from\nhttps://github.com/fredrik-johansson/mpmath\n\nSee the main documentation for more detailed instructions.\n\n2. Running tests\n----------------\n\nThe unit tests in mpmath/tests/ can be run via the script\nruntests.py, but it is recommended to run them with py.test\n(https://pytest.org/), especially\nto generate more useful reports in case there are failures.\n\nYou may also want to check out the demo scripts in the demo\ndirectory.\n\nThe master branch is automatically tested by Travis CI.\n\n3. Documentation\n----------------\n\nDocumentation in reStructuredText format is available in the\ndoc directory included with the source package. These files\nare human-readable, but can be compiled to prettier HTML using\nthe build.py script (requires Sphinx, http://sphinx.pocoo.org/).\n\nSee setup.txt in the documentation for more information.\n\nThe most recent documentation is also available in HTML format:\n\nhttp://mpmath.org/doc/current/\n\n4. Known problems\n-----------------\n\nMpmath is a work in progress. Major issues include:\n\n* Some functions may return incorrect values when given extremely\n  large arguments or arguments very close to singularities.\n\n* Directed rounding works for arithmetic operations. It is implemented\n  heuristically for other operations, and their results may be off by one\n  or two units in the last place (even if otherwise accurate).\n\n* Some IEEE 754 features are not available. Inifinities and NaN are\n  partially supported; denormal rounding is currently not available\n  at all.\n\n* The interface for switching precision and rounding is not finalized.\n  The current method is not threadsafe.\n\n5. Help and bug reports\n-----------------------\n\nGeneral questions and comments can be sent to the mpmath mailinglist,\nmpmath@googlegroups.com\n\nYou can also report bugs and send patches to the mpmath issue tracker,\nhttps://github.com/fredrik-johansson/mpmath/issues\n",
+        "home_page": "http://mpmath.org/",
+        "author": "Fredrik Johansson",
+        "author_email": "fredrik.johansson@gmail.com",
+        "license": "BSD",
+        "license_file": [
+          "LICENSE"
+        ],
+        "classifier": [
+          "License :: OSI Approved :: BSD License",
+          "Topic :: Scientific/Engineering :: Mathematics",
+          "Topic :: Software Development :: Libraries :: Python Modules",
+          "Programming Language :: Python",
+          "Programming Language :: Python :: 2",
+          "Programming Language :: Python :: 2.7",
+          "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3.5",
+          "Programming Language :: Python :: 3.6",
+          "Programming Language :: Python :: 3.7",
+          "Programming Language :: Python :: 3.8",
+          "Programming Language :: Python :: 3.9",
+          "Programming Language :: Python :: Implementation :: CPython",
+          "Programming Language :: Python :: Implementation :: PyPy"
+        ],
+        "requires_dist": [
+          "pytest (>=4.6) ; extra == 'develop'",
+          "pycodestyle ; extra == 'develop'",
+          "pytest-cov ; extra == 'develop'",
+          "codecov ; extra == 'develop'",
+          "wheel ; extra == 'develop'",
+          "sphinx ; extra == 'docs'",
+          "gmpy2 (>=2.1.0a4) ; (platform_python_implementation != \"PyPy\") and extra == 'gmpy'",
+          "pytest (>=4.6) ; extra == 'tests'"
+        ],
+        "project_url": [
+          "Source, https://github.com/fredrik-johansson/mpmath",
+          "Tracker, https://github.com/fredrik-johansson/mpmath/issues",
+          "Documentation, http://mpmath.org/doc/current/"
+        ],
+        "provides_extra": [
+          "develop",
+          "docs",
+          "gmpy",
+          "tests"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/a3/92/ead346e904390a53e71b5da2df7e7839abb16e967ba07fa15addf1f9f37c/torch_stoi-0.2.3-py3-none-any.whl",
+        "archive_info": {
+          "hashes": {
+            "sha256": "6eee85e33b42fe843a2150de46000f72e7b87cbeb19ae6ab9bbd94b6ec6b3cd2"
+          },
+          "hash": "sha256=6eee85e33b42fe843a2150de46000f72e7b87cbeb19ae6ab9bbd94b6ec6b3cd2"
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": false,
+      "metadata": {
+        "metadata_version": "2.1",
+        "name": "torch-stoi",
+        "version": "0.2.3",
+        "summary": "Computes Short Term Objective Intelligibility in PyTorch",
+        "description": "## PyTorch implementation of STOI\n[![Build Status][travis-badge]][travis]\n[![PyPI Status](https://badge.fury.io/py/torch-stoi.svg)](https://badge.fury.io/py/torch-stoi)\n\n\nImplementation of the classical and extended Short \nTerm Objective Intelligibility in PyTorch.\nSee also [Cees Taal's website](http://www.ceestaal.nl/code/) and \nthe [python implementation](https://github.com/mpariente/pystoi)\n\n### Install\n```bash\npip install torch_stoi\n```\n\n## Important warning\n**This implementation is intended to be used as a loss function only.**  \nIt doesn't replicate the exact behavior of the original metrics\nbut the results should be close enough that it can be used \nas a loss function. See the Notes in the\n [`NegSTOILoss`](./torch_stoi/stoi.py) class.\n \nQuantitative comparison coming soon hopefully :rocket:\n\n### Usage\n```python\nimport torch\nfrom torch import nn\nfrom torch_stoi import NegSTOILoss\n\nsample_rate = 16000\nloss_func = NegSTOILoss(sample_rate=sample_rate)\n# Your nnet and optimizer definition here\nnnet = nn.Module()\n\nnoisy_speech = torch.randn(2, 16000)\nclean_speech = torch.randn(2, 16000)\n# Estimate clean speech\nest_speech = nnet(noisy_speech)\n# Compute loss and backward (then step etc...)\nloss_batch = loss_func(est_speech, clean_speech)\nloss_batch.mean().backward()\n```\n\n### Comparing NumPy and PyTorch versions : the static test\nValues obtained with the NumPy version (commit [84b1bd8](https://github.com/mpariente/pystoi/commit/84b1bd8f894c76eb5ddc3425946a4e2052e825fe)) are compared to\nthe PyTorch version in the following graphs.  \n##### 8kHz\nClassic STOI measure\n\n<img src=\"./plots/8kHzwithVAD.png\" width=\"400\"/> <img src=\"./plots/8kHzwoVAD.png\" width=\"400\"/>\n\nExtended STOI measure\n\n<img src=\"./plots/8kHzExtendedwithVAD.png\" width=\"400\"/> <img src=\"./plots/8kHzExtendedwoVAD.png\" width=\"400\">\n\n##### 16kHz\nClassic STOI measure\n\n<img src=\"./plots/16kHzwithVAD.png\" width=\"400\"> <img src=\"./plots/16kHzwoVAD.png\" width=\"400\">\n\nExtended STOI measure\n\n<img src=\"./plots/16kHzExtendedwithVAD.png\" width=\"400\"> <img src=\"./plots/16kHzExtendedwoVAD.png\" width=\"400\">\n\n\n16kHz signals used to compare both versions contained a lot\nof silence, which explains why the match is very bad without \nVAD. \n\n### Comparing NumPy and PyTorch versions : Training a DNN\nComing in the near future\n\n### References\n* [1] C.H.Taal, R.C.Hendriks, R.Heusdens, J.Jensen 'A Short-Time\n  Objective Intelligibility Measure for Time-Frequency Weighted Noisy Speech',\n  ICASSP 2010, Texas, Dallas.\n* [2] C.H.Taal, R.C.Hendriks, R.Heusdens, J.Jensen 'An Algorithm for\n  Intelligibility Prediction of Time-Frequency Weighted Noisy Speech',\n  IEEE Transactions on Audio, Speech, and Language Processing, 2011.\n* [3] J. Jensen and C. H. Taal, 'An Algorithm for Predicting the\n  Intelligibility of Speech Masked by Modulated Noise Maskers',\n  IEEE Transactions on Audio, Speech and Language Processing, 2016.\n\n\n[travis]: https://travis-ci.com/mpariente/pytorch_stoi\n[travis-badge]: https://travis-ci.com/mpariente/pytorch_stoi.svg?branch=master\n",
+        "description_content_type": "text/markdown",
+        "home_page": "https://github.com/mpariente/pytorch_stoi",
+        "author": "Manuel Pariente",
+        "author_email": "pariente.mnl@gmail.com",
+        "license": "MIT",
+        "license_file": [
+          "LICENSE"
+        ],
+        "classifier": [
+          "Development Status :: 4 - Beta",
+          "Intended Audience :: Science/Research",
+          "License :: OSI Approved :: MIT License",
+          "Programming Language :: Python :: 3"
+        ],
+        "requires_dist": [
+          "numpy",
+          "torch",
+          "pystoi",
+          "torchaudio"
+        ]
+      }
+    }
+  ],
+  "environment": {
+    "implementation_name": "cpython",
+    "implementation_version": "3.11.5",
+    "os_name": "nt",
+    "platform_machine": "AMD64",
+    "platform_release": "10",
+    "platform_system": "Windows",
+    "platform_version": "10.0.26200",
+    "python_full_version": "3.11.5",
+    "platform_python_implementation": "CPython",
+    "python_version": "3.11",
+    "sys_platform": "win32"
+  }
+}

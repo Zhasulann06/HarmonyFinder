@@ -1,0 +1,57 @@
+{
+  "phase": "4A",
+  "review_date": "2026-10-15",
+  "recommended_trial": "Seed-VC V1 F0-conditioned 44.1 kHz singing model",
+  "neural_inference_status": "blocked_by_incomplete_dependency_and_weight_downloads",
+  "neural_wavs_generated": false,
+  "perceptual_review": "Not performed; user review required",
+  "gpu": {
+    "name": "NVIDIA GeForce RTX 3050 Laptop GPU",
+    "total_mib": 4096,
+    "used_mib_at_inspection": 75,
+    "free_mib_at_inspection": 3888,
+    "driver": "610.62",
+    "neural_peak_allocated_bytes": null,
+    "neural_peak_reserved_bytes": null,
+    "four_gb_sufficiency": "Unverified; no official guarantee found for full singing pipeline"
+  },
+  "host": {
+    "python": "3.11.5",
+    "windows_build": "10.0.26200",
+    "ram_total_bytes": 16931676160,
+    "ram_available_bytes_at_inspection": 3295166464,
+    "disk_free_bytes_at_inspection": 83006668800,
+    "application_torch": "2.14.1+cpu",
+    "application_torch_cuda_available": false,
+    "application_torchaudio": null,
+    "application_environment_modified": false
+  },
+  "downloads": {
+    "five_required_weight_files_bytes": 2486122472,
+    "weights_configs_cards_bytes": 2486344604,
+    "cuda_torch_wheel_bytes": 2441950418,
+    "verified_code_config_licence_files": 82,
+    "verified_code_config_licence_bytes": 768696,
+    "source_archive_bytes": 49003480,
+    "source_archive_bundled_pretrained_assets": {
+      "campplus_cn_common.bin": 28036335,
+      "sig_bak_ovr.onnx": 1157965,
+      "model_v8.onnx": 224860
+    },
+    "partial_seed_checkpoint_bytes": 199229440,
+    "initial_seed_download": "SSL read timeout",
+    "initial_cuda_torch_download": "pip HTTPS read timeout; no packages installed",
+    "resume_probe_bytes": 8388608,
+    "resume_probe_seconds": 10.791594799986342,
+    "isolated_environment_installed_packages": {"pip": "23.2.1", "setuptools": "65.5.0"}
+  },
+  "dynamic_f0": {
+    "stock_cli": "Constant semitone offset only; no external target-F0 file flag",
+    "model": "Frame-varying F0 is an input to the length regulator; quantized to pitch bins",
+    "adapter": "Experimental source-F0 callback replacement; numeric tests pass; not exercised with neural weights",
+    "complete_dynamic_harmony_system": false
+  },
+  "baseline_run": "runs/20261015T182215Z-ddacdb38",
+  "listening_directory": "runs/20261015T182215Z-ddacdb38/listening-4fde07c0",
+  "tests": {"existing_backend": 303, "experiment": 18, "total_passed": 321, "skipped": 0, "seconds": 25.54}
+}

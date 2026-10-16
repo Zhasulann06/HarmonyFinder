@@ -1,0 +1,17 @@
+# Isolated Phase 4A/4B-1 dependencies. Never install into the app .venv.
+# Install the verified local CUDA torch/torchaudio wheels first.
+numpy==1.26.4
+scipy==1.13.1
+numba==0.61.2
+llvmlite==0.44.0
+librosa==0.10.2
+soundfile==0.12.1
+transformers==4.46.3
+huggingface-hub==0.28.1
+munch==4.0.0
+einops==0.8.0
+matplotlib==3.9.4
+descript-audio-codec==1.0.0
+pyyaml==6.0.2
+pyloudnorm==0.1.1
+pytest>=9,<10

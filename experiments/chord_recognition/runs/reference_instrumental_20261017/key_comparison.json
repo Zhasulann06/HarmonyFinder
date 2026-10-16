@@ -1,0 +1,341 @@
+{
+  "scores": [
+    {
+      "key": "D major",
+      "compatible_seconds": 10.54,
+      "classified_seconds": 10.54,
+      "fraction": 1.0,
+      "vocabulary": [
+        "A:major",
+        "B:minor",
+        "D:major",
+        "E:minor",
+        "F#:minor",
+        "G:major"
+      ]
+    },
+    {
+      "key": "B natural_minor",
+      "compatible_seconds": 10.54,
+      "classified_seconds": 10.54,
+      "fraction": 1.0,
+      "vocabulary": [
+        "A:major",
+        "B:minor",
+        "D:major",
+        "E:minor",
+        "F#:minor",
+        "G:major"
+      ]
+    },
+    {
+      "key": "E natural_minor",
+      "compatible_seconds": 8.04,
+      "classified_seconds": 10.54,
+      "fraction": 0.7628083491461101,
+      "vocabulary": [
+        "A:minor",
+        "B:minor",
+        "C:major",
+        "D:major",
+        "E:minor",
+        "G:major"
+      ]
+    },
+    {
+      "key": "F# natural_minor",
+      "compatible_seconds": 8.04,
+      "classified_seconds": 10.54,
+      "fraction": 0.7628083491461101,
+      "vocabulary": [
+        "A:major",
+        "B:minor",
+        "C#:minor",
+        "D:major",
+        "E:major",
+        "F#:minor"
+      ]
+    },
+    {
+      "key": "G major",
+      "compatible_seconds": 8.04,
+      "classified_seconds": 10.54,
+      "fraction": 0.7628083491461101,
+      "vocabulary": [
+        "A:minor",
+        "B:minor",
+        "C:major",
+        "D:major",
+        "E:minor",
+        "G:major"
+      ]
+    },
+    {
+      "key": "A major",
+      "compatible_seconds": 8.04,
+      "classified_seconds": 10.54,
+      "fraction": 0.7628083491461101,
+      "vocabulary": [
+        "A:major",
+        "B:minor",
+        "C#:minor",
+        "D:major",
+        "E:major",
+        "F#:minor"
+      ]
+    },
+    {
+      "key": "C major",
+      "compatible_seconds": 2.5,
+      "classified_seconds": 10.54,
+      "fraction": 0.23719165085388996,
+      "vocabulary": [
+        "A:minor",
+        "C:major",
+        "D:minor",
+        "E:minor",
+        "F:major",
+        "G:major"
+      ]
+    },
+    {
+      "key": "C# natural_minor",
+      "compatible_seconds": 2.5,
+      "classified_seconds": 10.54,
+      "fraction": 0.23719165085388996,
+      "vocabulary": [
+        "A:major",
+        "B:major",
+        "C#:minor",
+        "E:major",
+        "F#:minor",
+        "G#:minor"
+      ]
+    },
+    {
+      "key": "E major",
+      "compatible_seconds": 2.5,
+      "classified_seconds": 10.54,
+      "fraction": 0.23719165085388996,
+      "vocabulary": [
+        "A:major",
+        "B:major",
+        "C#:minor",
+        "E:major",
+        "F#:minor",
+        "G#:minor"
+      ]
+    },
+    {
+      "key": "A natural_minor",
+      "compatible_seconds": 2.5,
+      "classified_seconds": 10.54,
+      "fraction": 0.23719165085388996,
+      "vocabulary": [
+        "A:minor",
+        "C:major",
+        "D:minor",
+        "E:minor",
+        "F:major",
+        "G:major"
+      ]
+    },
+    {
+      "key": "C natural_minor",
+      "compatible_seconds": 0,
+      "classified_seconds": 10.54,
+      "fraction": 0.0,
+      "vocabulary": [
+        "A#:major",
+        "C:minor",
+        "D#:major",
+        "F:minor",
+        "G#:major",
+        "G:minor"
+      ]
+    },
+    {
+      "key": "C# major",
+      "compatible_seconds": 0,
+      "classified_seconds": 10.54,
+      "fraction": 0.0,
+      "vocabulary": [
+        "A#:minor",
+        "C#:major",
+        "D#:minor",
+        "F#:major",
+        "F:minor",
+        "G#:major"
+      ]
+    },
+    {
+      "key": "D natural_minor",
+      "compatible_seconds": 0,
+      "classified_seconds": 10.54,
+      "fraction": 0.0,
+      "vocabulary": [
+        "A#:major",
+        "A:minor",
+        "C:major",
+        "D:minor",
+        "F:major",
+        "G:minor"
+      ]
+    },
+    {
+      "key": "D# major",
+      "compatible_seconds": 0,
+      "classified_seconds": 10.54,
+      "fraction": 0.0,
+      "vocabulary": [
+        "A#:major",
+        "C:minor",
+        "D#:major",
+        "F:minor",
+        "G#:major",
+        "G:minor"
+      ]
+    },
+    {
+      "key": "D# natural_minor",
+      "compatible_seconds": 0,
+      "classified_seconds": 10.54,
+      "fraction": 0.0,
+      "vocabulary": [
+        "A#:minor",
+        "B:major",
+        "C#:major",
+        "D#:minor",
+        "F#:major",
+        "G#:minor"
+      ]
+    },
+    {
+      "key": "F major",
+      "compatible_seconds": 0,
+      "classified_seconds": 10.54,
+      "fraction": 0.0,
+      "vocabulary": [
+        "A#:major",
+        "A:minor",
+        "C:major",
+        "D:minor",
+        "F:major",
+        "G:minor"
+      ]
+    },
+    {
+      "key": "F natural_minor",
+      "compatible_seconds": 0,
+      "classified_seconds": 10.54,
+      "fraction": 0.0,
+      "vocabulary": [
+        "A#:minor",
+        "C#:major",
+        "C:minor",
+        "D#:major",
+        "F:minor",
+        "G#:major"
+      ]
+    },
+    {
+      "key": "F# major",
+      "compatible_seconds": 0,
+      "classified_seconds": 10.54,
+      "fraction": 0.0,
+      "vocabulary": [
+        "A#:minor",
+        "B:major",
+        "C#:major",
+        "D#:minor",
+        "F#:major",
+        "G#:minor"
+      ]
+    },
+    {
+      "key": "G natural_minor",
+      "compatible_seconds": 0,
+      "classified_seconds": 10.54,
+      "fraction": 0.0,
+      "vocabulary": [
+        "A#:major",
+        "C:minor",
+        "D#:major",
+        "D:minor",
+        "F:major",
+        "G:minor"
+      ]
+    },
+    {
+      "key": "G# major",
+      "compatible_seconds": 0,
+      "classified_seconds": 10.54,
+      "fraction": 0.0,
+      "vocabulary": [
+        "A#:minor",
+        "C#:major",
+        "C:minor",
+        "D#:major",
+        "F:minor",
+        "G#:major"
+      ]
+    },
+    {
+      "key": "G# natural_minor",
+      "compatible_seconds": 0,
+      "classified_seconds": 10.54,
+      "fraction": 0.0,
+      "vocabulary": [
+        "B:major",
+        "C#:minor",
+        "D#:minor",
+        "E:major",
+        "F#:major",
+        "G#:minor"
+      ]
+    },
+    {
+      "key": "A# major",
+      "compatible_seconds": 0,
+      "classified_seconds": 10.54,
+      "fraction": 0.0,
+      "vocabulary": [
+        "A#:major",
+        "C:minor",
+        "D#:major",
+        "D:minor",
+        "F:major",
+        "G:minor"
+      ]
+    },
+    {
+      "key": "A# natural_minor",
+      "compatible_seconds": 0,
+      "classified_seconds": 10.54,
+      "fraction": 0.0,
+      "vocabulary": [
+        "A#:minor",
+        "C#:major",
+        "D#:minor",
+        "F#:major",
+        "F:minor",
+        "G#:major"
+      ]
+    },
+    {
+      "key": "B major",
+      "compatible_seconds": 0,
+      "classified_seconds": 10.54,
+      "fraction": 0.0,
+      "vocabulary": [
+        "B:major",
+        "C#:minor",
+        "D#:minor",
+        "E:major",
+        "F#:major",
+        "G#:minor"
+      ]
+    }
+  ],
+  "interpretation": "Vocabulary compatibility only, not a key estimate or accuracy measure. Relative major/minor pairs share triads; ambiguous/no-chord frames are excluded; diminished chords are not modeled."
+}
